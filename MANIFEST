@@ -1,0 +1,8 @@
+Changes
+MANIFEST
+Makefile.PL
+README
+lib/PkgConfig.pm
+t/00-load.t
+
+script/pkg-config.pl
