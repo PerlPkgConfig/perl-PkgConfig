@@ -1,1 +1,1 @@
-lib/PkgConfig.pm
+../lib/PkgConfig.pm

@@ -1,5 +1,9 @@
 Revision history for PkgConfig
 
-0.01    Date/time
+0.03_0  Feb 18 2012
+        Implemented user-defined variables and cleaned up variable
+        parsing
+
+0.01_0    Date/time
         First version, released on an unsuspecting world.
 
