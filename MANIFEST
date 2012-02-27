@@ -6,3 +6,6 @@ lib/PkgConfig.pm
 t/00-load.t
 
 script/pkg-config.pl
+t/01-script.t
+t/pc_files.tar.gz
+MANIFEST.SKIP

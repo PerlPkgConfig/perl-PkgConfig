@@ -17,7 +17,8 @@ package PkgConfig::UDefs;
 
 package PkgConfig;
 
-our $VERSION = '0.03_0';
+#First two digits are Perl version, second two are pkg-config version
+our $VERSION = '0.04020';
 
 require 5.005;
 
@@ -62,7 +63,10 @@ our @DEFAULT_SEARCH_PATH = qw(
     /usr/local/lib/pkgconfig /usr/local/share/pkgconfig
 
 );
-push @DEFAULT_SEARCH_PATH, split(/:/, $ENV{PKG_CONFIG_PATH} || "");
+
+my @ENV_SEARCH_PATH = split(/:/, $ENV{PKG_CONFIG_PATH} || "");
+
+push @DEFAULT_SEARCH_PATH, @ENV_SEARCH_PATH;
 
 our @DEFAULT_EXCLUDE_CFLAGS = qw(-I/usr/include -I/usr/local/include);
 # don't include default link/search paths!
@@ -172,6 +176,8 @@ struct(
      # classes used for storing persistent data
      'varclass' => '$',
      'udefclass' => '$',
+     'filevars' => '*%',
+     'uservars' => '*%',
      
      # options for printing variables
      'print_variables' => '$',
@@ -414,10 +420,13 @@ sub parse_line {
 
     # pkg-config escapes a '$' with a '$$'. This won't go in perl:
     $value =~ s/[^\\]\$\$/\\\$/g;
+    $value =~ s/([@%&])/\$1/g;
     
     
     # append our pseudo-package for persistence.
     my $varclass = $self->varclass;
+    $value =~ s/(\$\{[^}]+\})/lc($1)/ge;
+    
     $value =~ s/\$\{/\$\{$varclass\::/g;
     
     #quoute the value string, unless quouted already
@@ -442,7 +451,13 @@ sub parse_pcfile {
     my @lines = (<$fh>);
     close($fh);
     
+    my $text = join("", @lines);
+    $text =~ s,\\[\r\n],,g;
+    @lines = split(/[\r\n]/, $text);
+    
     my @eval_strings;
+    
+    #Fold lines:
     
     foreach my $line (@lines) {
         $self->parse_line($line, \@eval_strings);
@@ -662,6 +677,7 @@ use Getopt::Long;
 use Pod::Usage;
 
 my $quiet_errors = 1;
+my @ARGV_PRESERVE = @ARGV;
 
 my @POD_USAGE_SECTIONS = (
     "NAME",
@@ -696,6 +712,7 @@ GetOptions(
     
     'debug'         => \my $Debug,
     'with-path=s',    => \my @ExtraPaths,
+    'env-only',     => \my $EnvOnly,
     'guess-paths',  => \my $GuessPaths,
     
     'h|help|?'      => \my $WantHelp
@@ -752,6 +769,12 @@ if($PrintExists) {
 
 $pc_options{static} = $UseStatic;
 $pc_options{search_path} = \@ExtraPaths;
+
+if($EnvOnly) {
+    delete $pc_options{search_path};
+    $pc_options{search_path_override} = [ @ExtraPaths, @ENV_SEARCH_PATH];
+}
+
 $pc_options{print_variables} = $PrintVariables;
 $pc_options{print_values} = $PrintValues;
 $pc_options{VARS} = \%UserVariables;
@@ -894,6 +917,11 @@ Prepend C<PATH> to the list of search paths containing C<.pc> files.
 This option can be specified multiple times with different paths, and they will
 all be added.
 
+=head4 --env-only
+
+Using this option, B<only> paths specified in C<PKG_CONFIG_PATH> are recognized
+and any hard-coded defaults are ignored.
+
 =head4 --guess-paths
 
 Invoke C<gcc> and C<ld> to determine default linker and include paths. Default
@@ -1033,10 +1061,10 @@ own observation, it seems this module does a better job, but I might be wrong.
 
 Version checking is not yet implemented.
 
-There is currently a dependency on a debugging module, just to preserve my sanity.
-This will be removed in a future release.
-
-Module tests are missing.
+Unlike C<pkg-config>, the scripts C<--exists> function will return nonzero if
+a package B<or> any of its dependencies are missing. This differs from the
+behavior of C<pkg-config> which will just check for the definition of the
+package itself (without dependencies).
 
 =head1 SEE ALSO
 
