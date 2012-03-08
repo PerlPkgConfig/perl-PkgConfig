@@ -13,8 +13,13 @@ WriteMakefile(
     PL_FILES            => {},
     PREREQ_PM => {
         'Test::More' => 0,
-        'Log::Fu' => '0.25',
+        'Log::Fu' => 0.25,
     },
+    BUILD_REQUIRES => {
+        'Archive::Extract' => 0,
+        'Fcntl' => 0
+    },
+    
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'PkgConfig-*' },
 );
