@@ -800,7 +800,8 @@ if($o->print_variables) {
 }
 
 if($OutputVariableValue) {
-    print $o->_pc_var($OutputVariableValue) . "\n";
+	my $val = ($o->_pc_var($OutputVariableValue) or "");
+	print $val . "\n";
 }
 
 if(!$WantFlags) {
