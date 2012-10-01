@@ -181,6 +181,7 @@ struct(
      
      # options for printing variables
      'print_variables' => '$',
+     'print_variable' => '$',
      'print_values' => '$',
      'defined_variables' => '*%',
     ]
@@ -704,7 +705,7 @@ GetOptions(
     
     'print-variables' => \my $PrintVariables,
     'print-values'  => \my $PrintValues,
-    'variable=s',   => \my %OutputVariableValue,
+    'variable=s',   => \my $OutputVariableValue,
     
     'modversion'    => \my $PrintVersion,
     'version',      => \my $PrintAPIversion,
@@ -796,6 +797,10 @@ if($o->print_variables) {
             print "\n";
         }
     }
+}
+
+if($OutputVariableValue) {
+    print $o->_pc_var($OutputVariableValue) . "\n";
 }
 
 if(!$WantFlags) {
