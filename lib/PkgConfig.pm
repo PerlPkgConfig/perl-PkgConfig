@@ -694,6 +694,8 @@ my @POD_USAGE_OPTIONS = (
 
 GetOptions(
     'libs' => \my $PrintLibs,
+    'libs-only-L' => \my $PrintLibsOnlyL,
+    'libs-only-l' => \my $PrintLibsOnlyl,
     'static' => \my $UseStatic,
     'cflags' => \my $PrintCflags,
     'exists' => \my $PrintExists,
@@ -756,7 +758,7 @@ if($SilenceErrors) {
     $quiet_errors = 1;
 }
 
-my $WantFlags = ($PrintCflags || $PrintLibs || $PrintVersion);
+my $WantFlags = ($PrintCflags || $PrintLibs || $PrintLibsOnlyL || $PrintLibsOnlyl || $PrintVersion);
 
 if($WantFlags) {
     $quiet_errors = 0 unless $SilenceErrors;
@@ -819,6 +821,14 @@ if($PrintCflags) {
 
 if($PrintLibs) {
     print join(" ", $o->get_ldflags) . " ";
+}
+
+if($PrintLibsOnlyL) {
+	print grep /^-L/, $o->get_ldflags;
+}
+
+if($PrintLibsOnlyl) {
+    print grep /^-l/, $o->get_ldflags;
 }
 
 print "\n";
@@ -903,6 +913,14 @@ The output should normally be suitable for passing to your favorite compiler.
 (Also) print linker flags. Dependencies are traverse in order. Top-level dependencies
 will appear earlier in the command line than bottom-level dependencies.
 
+=head4 --libs-only-L
+
+Prints -L/-R part of "--libs". It defines library search path but without libraries to link with.
+
+=head4 --libs-only-l
+
+Prints the -l part of "--libs".
+
 =head4 --cflags
 
 (Also) print compiler and C preprocessor flags.
@@ -937,6 +955,10 @@ paths will be excluded from explicit -L and -I flags.
 
 Define a variable, overriding any such variable definition in the .pc file, and
 allowing your value to interpolate with subsequent uses.
+
+=head4 --variable=VARIABLE
+
+This returns the value of a variable defined in a package's .pc file.
 
 =head4 --print-variables
 
