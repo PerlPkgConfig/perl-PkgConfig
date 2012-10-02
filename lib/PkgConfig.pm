@@ -25,7 +25,6 @@ require 5.005;
 use strict;
 use warnings;
 use File::Spec;
-use Getopt::Long qw(:config no_ignore_case);
 use Class::Struct; #in core since 5.004
 our $UseDebugging;
 
