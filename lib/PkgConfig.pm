@@ -829,7 +829,7 @@ if($PrintLibs) {
 if($PrintLibsOnlyl or ($PrintLibsOnlyl and $PrintLibsOnlyL)) {
     print grep /^-l/, $o->get_ldflags;
 } elsif ($PrintLibsOnlyL) {
-	print grep /^-L/, $o->get_ldflags;
+	print grep /^-[LR]/, $o->get_ldflags;
 }
 
 print "\n";
