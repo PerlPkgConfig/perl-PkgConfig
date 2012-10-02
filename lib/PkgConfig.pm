@@ -25,7 +25,7 @@ require 5.005;
 use strict;
 use warnings;
 use File::Spec;
-use Getopt::Long;
+use Getopt::Long qw(:config no_ignore_case);
 use Class::Struct; #in core since 5.004
 our $UseDebugging;
 
@@ -674,7 +674,7 @@ if(caller) {
 package PkgConfig::Script;
 use strict;
 use warnings;
-use Getopt::Long;
+use Getopt::Long qw(:config no_ignore_case);
 use Pod::Usage;
 
 my $quiet_errors = 1;
@@ -695,7 +695,7 @@ my @POD_USAGE_OPTIONS = (
 GetOptions(
     'libs' => \my $PrintLibs,
     'libs-only-L' => \my $PrintLibsOnlyL,
-    'libs-only-l' => \my $PrintLibsOnlyl,
+	'libs-only-l' => \my $PrintLibsOnlyl,
     'static' => \my $UseStatic,
     'cflags' => \my $PrintCflags,
     'exists' => \my $PrintExists,
