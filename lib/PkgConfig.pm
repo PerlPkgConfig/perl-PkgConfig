@@ -823,12 +823,14 @@ if($PrintLibs) {
     print join(" ", $o->get_ldflags) . " ";
 }
 
-if($PrintLibsOnlyL) {
-	print grep /^-L/, $o->get_ldflags;
-}
+# handle --libs-only-L and --libs-only-l but watch the case when
+# we got 'pkg-config.pl --libs-only-L --libs-only-l foo' which must behave just like
+# 'pkg-config.pl --libs-only-l foo'
 
-if($PrintLibsOnlyl) {
+if($PrintLibsOnlyl or ($PrintLibsOnlyl and $PrintLibsOnlyL)) {
     print grep /^-l/, $o->get_ldflags;
+} elsif ($PrintLibsOnlyL) {
+	print grep /^-L/, $o->get_ldflags;
 }
 
 print "\n";
