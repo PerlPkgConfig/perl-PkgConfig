@@ -58,21 +58,19 @@ sub extract_our_tarball
 {
     open my $fh, "+<", $TARBALL or die "$TARBALL: $!";
     my $extract_dir = File::Spec->catfile($FindBin::Bin, 'usr');
-    my $lock_status = flock($fh, LOCK_SH); # Block.
+
+    do {
+        local $SIG{ALRM} = sub { die 'timeout waiting for lock' };
+        alarm 10;
+        flock($fh, LOCK_EX); # Block.
+        alarm 0;
+    };
     
     # If we have a shared lock, let us check if the directory exists:
     if (-d $extract_dir) {
         return;
     }
     
-    # Now, let's try to get an exclusive lock. The process to get such a lock
-    # will be the one to extract the tarball:
-    $lock_status = flock($fh, LOCK_EX|LOCK_NB);
-    if (!$lock_status) {
-        flock($fh, LOCK_UN);
-        # Another process is extracting it. Wait until it's done.
-        goto &extract_our_tarball;
-    }
     my $tar = Archive::Tar->new($TARBALL);
     my $cwd = cwd();
     chdir $FindBin::Bin;
