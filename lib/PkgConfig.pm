@@ -34,9 +34,9 @@ use Data::Dumper;
 ### Check for Log::Fu                                                        ###
 ################################################################################
 BEGIN {
-    my $ret = eval {
-        require Log::Fu;
-        Log::Fu->import({level => "warn"}); 1;
+    my $ret = eval q{
+        use Log::Fu 0.25 { level => "warn" };
+        1;
     };
     
     if(!$ret) {

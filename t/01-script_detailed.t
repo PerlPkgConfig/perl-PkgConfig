@@ -3,13 +3,11 @@ use strict;
 use warnings;
 use Test::More;
 use File::Basename;
-use Dir::Self qw(:static);
 use Data::Dumper;
-use Archive::Extract;
 use File::Spec;
 use Config;
-use Dir::Self;
-use lib __DIR__;
+use FindBin;
+use lib $FindBin::Bin;
 use PkgConfigTest;
 
 run_common("glib-2.0"); ok($RV == 0, "package name exists");
