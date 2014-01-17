@@ -38,7 +38,7 @@ $ENV{PKG_CONFIG_PATH} = join(":", @PC_PATHS);
 our $RV;
 our $S;
 
-my $SCRIPT = $FindBin::Bin . "/../script/pkg-config.pl";
+my $SCRIPT = $FindBin::Bin . "/../script/ppkg-config";
 sub run_common {
     my @args = @_;
     (my $ret = qx($^X $SCRIPT --env-only @args))
