@@ -694,7 +694,7 @@ my @POD_USAGE_OPTIONS = (
 GetOptions(
     'libs' => \my $PrintLibs,
     'libs-only-L' => \my $PrintLibsOnlyL,
-	'libs-only-l' => \my $PrintLibsOnlyl,
+    'libs-only-l' => \my $PrintLibsOnlyl,
     'static' => \my $UseStatic,
     'cflags' => \my $PrintCflags,
     'exists' => \my $PrintExists,
@@ -801,8 +801,8 @@ if($o->print_variables) {
 }
 
 if($OutputVariableValue) {
-	my $val = ($o->_pc_var($OutputVariableValue) or "");
-	print $val . "\n";
+    my $val = ($o->_pc_var($OutputVariableValue) or "");
+    print $val . "\n";
 }
 
 if(!$WantFlags) {
@@ -829,7 +829,7 @@ if($PrintLibs) {
 if($PrintLibsOnlyl or ($PrintLibsOnlyl and $PrintLibsOnlyL)) {
     print grep /^-l/, $o->get_ldflags;
 } elsif ($PrintLibsOnlyL) {
-	print grep /^-[LR]/, $o->get_ldflags;
+    print grep /^-[LR]/, $o->get_ldflags;
 }
 
 print "\n";
