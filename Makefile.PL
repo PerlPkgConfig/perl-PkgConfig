@@ -19,6 +19,16 @@ WriteMakefile(
         'Archive::Extract' => 0,
         'Fcntl' => 0
     },
+    META_MERGE => {
+        'meta-spec' => { version => 2 },
+        resources => {
+            repository => {
+                type => 'git',
+                url  => 'https://github.com/mnunberg/perl-PkgConfig.git',
+                web  => 'https://github.com/mnunberg/perl-PkgConfig',
+            },
+        },
+    },
     
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'PkgConfig-*' },
