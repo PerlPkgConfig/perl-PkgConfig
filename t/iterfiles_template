@@ -2,8 +2,8 @@
 use strict;
 use warnings;
 use Test::More;
-use Dir::Self;
-use lib __DIR__;
+use FindBin ();
+use lib $FindBin::Bin;
 use PkgConfigTest;
 
 my $flist = PkgConfigTest::get_my_file_list(__FILE__);

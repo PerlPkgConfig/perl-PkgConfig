@@ -4,12 +4,13 @@ use strict;
 use warnings;
 use Test::More;
 use File::Basename;
-use Dir::Self qw(:static);
 use Data::Dumper;
-use Archive::Extract;
+use Archive::Tar;
 use File::Spec;
 use File::Basename qw(fileparse);
 use Config;
+use Cwd qw( cwd chdir );
+use FindBin ();
 use base qw(Exporter);
 
 use Fcntl qw(LOCK_EX LOCK_UN LOCK_SH LOCK_NB);
@@ -22,8 +23,8 @@ my @PC_PATHS = qw(usr/lib/pkgconfig usr/share/pkgconfig
                 
 
 
-my $TARBALL = File::Spec->catfile(__DIR__, 'pc_files.tar.gz');
-@PC_PATHS = map { __DIR__ . "/$_" } @PC_PATHS;
+my $TARBALL = File::Spec->catfile($FindBin::Bin, 'pc_files.tar.gz');
+@PC_PATHS = map { $FindBin::Bin . "/$_" } @PC_PATHS;
 @PC_PATHS = map {
     my @components = split(/\//, $_);
     $_ = File::Spec->catfile(@components);
@@ -37,7 +38,7 @@ $ENV{PKG_CONFIG_PATH} = join(":", @PC_PATHS);
 our $RV;
 our $S;
 
-my $SCRIPT = __DIR__ . "/../script/pkg-config.pl";
+my $SCRIPT = $FindBin::Bin . "/../script/pkg-config.pl";
 sub run_common {
     my @args = @_;
     (my $ret = qx($^X $SCRIPT --env-only @args))
@@ -56,7 +57,7 @@ sub expect_flags {
 sub extract_our_tarball
 {
     open my $fh, "+<", $TARBALL or die "$TARBALL: $!";
-    my $extract_dir = File::Spec->catfile(__DIR__, 'usr');
+    my $extract_dir = File::Spec->catfile($FindBin::Bin, 'usr');
     my $lock_status = flock($fh, LOCK_SH); # Block.
     
     # If we have a shared lock, let us check if the directory exists:
@@ -72,8 +73,11 @@ sub extract_our_tarball
         # Another process is extracting it. Wait until it's done.
         goto &extract_our_tarball;
     }
-    my $ae = Archive::Extract->new(archive => $TARBALL);
-    $ae->extract(to => __DIR__);
+    my $tar = Archive::Tar->new($TARBALL);
+    my $cwd = cwd();
+    chdir $FindBin::Bin;
+    $tar->extract;
+    chdir $cwd;
 }
 
 sub import {
@@ -86,12 +90,12 @@ sub get_my_file_list {
     my $needed = fileparse($pmfile, ".pm",".t");
     ($needed) = ($needed =~ /(FLIST.+)/);
     die "Invalid file $pmfile" unless $needed;
-    my $file_list = File::Spec->catfile(__DIR__, $needed);
+    my $file_list = File::Spec->catfile($FindBin::Bin, $needed);
     open my $fh, "<", $file_list or die "$file_list: $!";
     diag $file_list;
     my @lines = <$fh>;
     @lines = map { $_ =~ s/\s+$//g; $_ } @lines;
-    @lines = map { File::Spec->catfile(__DIR__, $_) } @lines;
+    @lines = map { File::Spec->catfile($FindBin::Bin, $_) } @lines;
     return \@lines;
 }
 

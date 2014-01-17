@@ -1,0 +1,5 @@
+t/usr/.+
+\.git.+
+^Makefile$
+^MANIFEST\.bak$
+^MYMETA\.
