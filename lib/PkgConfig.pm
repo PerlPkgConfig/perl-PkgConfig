@@ -25,7 +25,6 @@ require 5.005;
 use strict;
 use warnings;
 use File::Spec;
-use Getopt::Long;
 use Class::Struct; #in core since 5.004
 our $UseDebugging;
 
@@ -181,6 +180,7 @@ struct(
      
      # options for printing variables
      'print_variables' => '$',
+     'print_variable' => '$',
      'print_values' => '$',
      'defined_variables' => '*%',
     ]
@@ -673,7 +673,7 @@ if(caller) {
 package PkgConfig::Script;
 use strict;
 use warnings;
-use Getopt::Long;
+use Getopt::Long qw(:config no_ignore_case);
 use Pod::Usage;
 
 my $quiet_errors = 1;
@@ -693,6 +693,8 @@ my @POD_USAGE_OPTIONS = (
 
 GetOptions(
     'libs' => \my $PrintLibs,
+    'libs-only-L' => \my $PrintLibsOnlyL,
+    'libs-only-l' => \my $PrintLibsOnlyl,
     'static' => \my $UseStatic,
     'cflags' => \my $PrintCflags,
     'exists' => \my $PrintExists,
@@ -704,7 +706,7 @@ GetOptions(
     
     'print-variables' => \my $PrintVariables,
     'print-values'  => \my $PrintValues,
-    'variable=s',   => \my %OutputVariableValue,
+    'variable=s',   => \my $OutputVariableValue,
     
     'modversion'    => \my $PrintVersion,
     'version',      => \my $PrintAPIversion,
@@ -755,7 +757,7 @@ if($SilenceErrors) {
     $quiet_errors = 1;
 }
 
-my $WantFlags = ($PrintCflags || $PrintLibs || $PrintVersion);
+my $WantFlags = ($PrintCflags || $PrintLibs || $PrintLibsOnlyL || $PrintLibsOnlyl || $PrintVersion);
 
 if($WantFlags) {
     $quiet_errors = 0 unless $SilenceErrors;
@@ -798,6 +800,11 @@ if($o->print_variables) {
     }
 }
 
+if($OutputVariableValue) {
+    my $val = ($o->_pc_var($OutputVariableValue) or "");
+    print $val . "\n";
+}
+
 if(!$WantFlags) {
     exit(0);
 }
@@ -813,6 +820,16 @@ if($PrintCflags) {
 
 if($PrintLibs) {
     print join(" ", $o->get_ldflags) . " ";
+}
+
+# handle --libs-only-L and --libs-only-l but watch the case when
+# we got 'pkg-config.pl --libs-only-L --libs-only-l foo' which must behave just like
+# 'pkg-config.pl --libs-only-l foo'
+
+if($PrintLibsOnlyl or ($PrintLibsOnlyl and $PrintLibsOnlyL)) {
+    print grep /^-l/, $o->get_ldflags;
+} elsif ($PrintLibsOnlyL) {
+    print grep /^-[LR]/, $o->get_ldflags;
 }
 
 print "\n";
@@ -897,6 +914,14 @@ The output should normally be suitable for passing to your favorite compiler.
 (Also) print linker flags. Dependencies are traverse in order. Top-level dependencies
 will appear earlier in the command line than bottom-level dependencies.
 
+=head4 --libs-only-L
+
+Prints -L/-R part of "--libs". It defines library search path but without libraries to link with.
+
+=head4 --libs-only-l
+
+Prints the -l part of "--libs".
+
 =head4 --cflags
 
 (Also) print compiler and C preprocessor flags.
@@ -931,6 +956,10 @@ paths will be excluded from explicit -L and -I flags.
 
 Define a variable, overriding any such variable definition in the .pc file, and
 allowing your value to interpolate with subsequent uses.
+
+=head4 --variable=VARIABLE
+
+This returns the value of a variable defined in a package's .pc file.
 
 =head4 --print-variables
 
