@@ -743,7 +743,7 @@ if($PrintAPIversion) {
 
 if($PrintRealVersion) {
 
-    printf STDOUT ("pkg-config.pl - cruftless pkg-config\n" .
+    printf STDOUT ("ppkg-config - cruftless pkg-config\n" .
             "Version: %s\n", $PkgConfig::VERSION);
     exit(0);
 }
@@ -823,8 +823,8 @@ if($PrintLibs) {
 }
 
 # handle --libs-only-L and --libs-only-l but watch the case when
-# we got 'pkg-config.pl --libs-only-L --libs-only-l foo' which must behave just like
-# 'pkg-config.pl --libs-only-l foo'
+# we got 'ppkg-config --libs-only-L --libs-only-l foo' which must behave just like
+# 'ppkg-config --libs-only-l foo'
 
 if($PrintLibsOnlyl or ($PrintLibsOnlyl and $PrintLibsOnlyL)) {
     print grep /^-l/, $o->get_ldflags;
@@ -853,13 +853,15 @@ will be sanitized in a future 'release/stable' version.
 
 =head2 As a replacement for C<pkg-config>
 
-    $ pkg-config.pl --libs --cflags --static gio-2.0
+    $ ppkg-config --libs --cflags --static gio-2.0
 
     #outputs (lines artifically broken up for readability):
     # -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include
     # -pthread -lgio-2.0 -lz -lresolv -lgobject-2.0
     # -lgmodule-2.0 -ldl -lgthread-2.0 -pthread -lrt -lglib-2.0
 
+C<pkg-config.pl> can be used as an alias for C<ppkg-config> on platforms that
+support it.
 
 Compare to:
     $ pkg-config --libs --cflags --static gio-2.0

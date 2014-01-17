@@ -11,6 +11,7 @@ WriteMakefile(
       ? ('LICENSE'=> 'perl')
       : ()),
     PL_FILES            => {},
+    EXE_FILES           => [ 'script/ppkg-config', $^O ne 'MSWin32' ? 'script/pkg-config.pl' : () ],
     PREREQ_PM => {
         'Test::More' => 0,
     },
