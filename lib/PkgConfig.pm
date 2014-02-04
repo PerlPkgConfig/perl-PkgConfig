@@ -1103,6 +1103,9 @@ L<ExtUtils::PkgConfig>, a wrapper around the C<pkg-config> binary
 
 L<pkg-config|http://www.freedesktop.org/wiki/Software/pkg-config>
 
+L<http://www.openbsd.org/cgi-bin/cvsweb/src/usr.bin/pkg-config/> another 
+perl implementation of pkg-config
+
 =head1 AUTHOR & COPYRIGHT
 
 Copyright (C) 2012 M. Nunberg
