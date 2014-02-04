@@ -37,4 +37,5 @@ t/FLISTak
 t/FLISTal
 t/iterfiles_template
 t/pc_files.tar.gz
+t/pc_files.lock
 t/PkgConfigTest.pm

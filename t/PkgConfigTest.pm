@@ -24,6 +24,7 @@ my @PC_PATHS = qw(usr/lib/pkgconfig usr/share/pkgconfig
 
 
 my $TARBALL = File::Spec->catfile($FindBin::Bin, 'pc_files.tar.gz');
+my $LOCK    = File::Spec->catfile($FindBin::Bin, 'pc_files.lock');
 @PC_PATHS = map { $FindBin::Bin . "/$_" } @PC_PATHS;
 @PC_PATHS = map {
     my @components = split(/\//, $_);
@@ -56,7 +57,7 @@ sub expect_flags {
 # lock should remain in place
 sub extract_our_tarball
 {
-    open my $fh, "+<", $TARBALL or die "$TARBALL: $!";
+    open my $fh, "+<", $LOCK or die "$LOCK: $!";
     my $extract_dir = File::Spec->catfile($FindBin::Bin, 'usr');
 
     do {
