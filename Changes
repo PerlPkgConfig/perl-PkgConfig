@@ -1,5 +1,21 @@
 Revision history for PkgConfig
 
+0.06120 2014-02-05
+  - use dedicated lock instead of tar for tests because
+    Archive::Extract sometimes wants to lock the tar too (plicease)
+
+0.06020 2014-02-04
+  - avoid infiniate loop on windows (GH#8 plicease)
+  - install script as ppkg-config (everywhere) and pkg-config.pl (non-windows) (GH#7 plicease)
+  - removed non-core dependencies (GH#4 plicease)
+  - support for --variable (GH#5 Sanel Zukan)
+
+0.05020 2012-03-08
+  - release
+
+0.04020 2012-02-27
+  - release
+
 0.03_0  Feb 18 2012
         Implemented user-defined variables and cleaned up variable
         parsing
