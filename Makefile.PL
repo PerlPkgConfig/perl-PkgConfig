@@ -1,15 +1,15 @@
 use strict;
 use warnings;
-use ExtUtils::MakeMaker;
+use ExtUtils::MakeMaker 6.48;
+require 5.006;
 
 WriteMakefile(
     NAME                => 'PkgConfig',
     AUTHOR              => q{M. Nunberg <mnunberg@haskalah.org>},
     VERSION_FROM        => 'lib/PkgConfig.pm',
     ABSTRACT_FROM       => 'lib/PkgConfig.pm',
-    ($ExtUtils::MakeMaker::VERSION >= 6.3002
-      ? ('LICENSE'=> 'perl')
-      : ()),
+    LICENSE             => 'perl',
+    MIN_PERL_VERSION    => '5.006000',
     PL_FILES            => {},
     EXE_FILES           => [ 'script/ppkg-config', $^O ne 'MSWin32' ? 'script/pkg-config.pl' : () ],
     PREREQ_PM => {
