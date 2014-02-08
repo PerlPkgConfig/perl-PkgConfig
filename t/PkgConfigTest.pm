@@ -91,7 +91,7 @@ sub get_my_file_list {
     die "Invalid file $pmfile" unless $needed;
     my $file_list = File::Spec->catfile($FindBin::Bin, $needed);
     open my $fh, "<", $file_list or die "$file_list: $!";
-    diag $file_list;
+    note $file_list;
     my @lines = <$fh>;
     @lines = map { $_ =~ s/\s+$//g; $_ } @lines;
     @lines = map { File::Spec->catfile($FindBin::Bin, $_) } @lines;
@@ -100,7 +100,7 @@ sub get_my_file_list {
 
 sub run_exists_test {
     my ($flist,$pmfile) = @_;
-    diag "$pmfile: Will perform --exist tests";
+    note "$pmfile: Will perform --exist tests";
     foreach my $fname (@$flist) {
         next unless -f $fname;
         my ($base) = fileparse($fname, ".pc");
@@ -121,14 +121,14 @@ sub _single_flags_test {
             #these files define $prefix, but don't actually use them for
             #flags:
             if($base =~ /^(?:glu?)$/) {
-                diag("Skipping gl pcfiles which define but do not use 'prefix'");
+                note "Skipping gl pcfiles which define but do not use 'prefix'";
                 return;
             }
             
             #Check the file, see if it at all has a '$prefix'
             open my $fh, "<", $fname;
             if(!defined $fh) {
-                diag "$fname: $!";
+                note "$fname: $!";
                 return;
             }
             
@@ -136,7 +136,7 @@ sub _single_flags_test {
             if(grep /\$\{prefix\}/, @lines) {
                 ok(0, "Expected substituted prefix for $base");
             } else {
-                diag "File $fname has no \${prefix} directive";
+                note "File $fname has no \${prefix} directive";
             }
             return;
         }
@@ -146,7 +146,7 @@ sub _single_flags_test {
 
 sub run_flags_test {
     my ($flist,$pmfile) = @_;
-    diag "$pmfile: Will perform --prefix, --cflags, and --libs tests";
+    note "$pmfile: Will perform --prefix, --cflags, and --libs tests";
     foreach my $fname (@$flist) {
         _single_flags_test($fname);
     }

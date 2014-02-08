@@ -226,7 +226,10 @@ sub assign_var {
                     $self->_get_pc_varname($field), $value);
     
     log_debug("EVAL", $evalstr);
-    eval $evalstr;
+    do {
+        no warnings 'uninitialized';
+        eval $evalstr;
+    };
     if($@) {
         log_err($@);
     }
