@@ -64,6 +64,25 @@ our @DEFAULT_SEARCH_PATH = qw(
 
 );
 
+if($^O =~ /^(gnukfreebsd|linux)$/ && -r "/etc/debian_version") {
+    if(-x "/usr/bin/dpkg-architecture") {
+        my $arch = `/usr/bin/dpkg-architecture -qDEB_HOST_MULTIARCH`;
+        @DEFAULT_SEARCH_PATH = (
+            "/usr/local/lib/$arch/pkgconfig",
+            "/usr/local/lib/pkgconfig",
+            "/usr/local/share/pkgconfig",
+            "/usr/lib/$arch/pkgconfig",
+            "/usr/lib/pkgconfig",
+            "/usr/share/pkgconfig",
+        );
+    } else {
+        # TODO: the debian 6 official pkg-config also includes
+        # /usr/local/lib/pkgconfig/x86_64-linux-gnu
+        # /usr/lib/pkgconfig/x86_64-linux-gnu    
+        # but not sure if they are used
+    }
+}
+
 my @ENV_SEARCH_PATH = split($Config{path_sep}, $ENV{PKG_CONFIG_PATH} || "");
 
 unshift @DEFAULT_SEARCH_PATH, @ENV_SEARCH_PATH;
