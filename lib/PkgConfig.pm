@@ -66,7 +66,7 @@ our @DEFAULT_SEARCH_PATH = qw(
 
 my @ENV_SEARCH_PATH = split($Config{path_sep}, $ENV{PKG_CONFIG_PATH} || "");
 
-push @DEFAULT_SEARCH_PATH, @ENV_SEARCH_PATH;
+unshift @DEFAULT_SEARCH_PATH, @ENV_SEARCH_PATH;
 
 our @DEFAULT_EXCLUDE_CFLAGS = qw(-I/usr/include -I/usr/local/include);
 # don't include default link/search paths!
