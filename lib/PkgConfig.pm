@@ -59,8 +59,8 @@ our $VarClassSerial = 0;
 ### Sane Defaults                                                            ###
 ################################################################################
 our @DEFAULT_SEARCH_PATH = qw(
-    /usr/lib/pkgconfig /usr/share/pkgconfig
     /usr/local/lib/pkgconfig /usr/local/share/pkgconfig
+    /usr/lib/pkgconfig /usr/share/pkgconfig
 
 );
 
