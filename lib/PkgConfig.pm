@@ -412,11 +412,10 @@ sub parse_line {
 
     log_debugf("Field %s, Value %s", $field, $value);
     
+    $field = lc($field);
+    
     #perl variables can't have '.' in them:
     $field =~ s/\./DOT/g;
-    
-    
-    $field = lc($field);
     
     #remove quoutes from field names
     $field =~ s/['"]//g;
