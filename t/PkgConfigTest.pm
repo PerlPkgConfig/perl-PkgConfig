@@ -2,6 +2,7 @@
 package PkgConfigTest;
 use strict;
 use warnings;
+use Config;
 use Test::More;
 use File::Basename;
 use Data::Dumper;
@@ -34,7 +35,7 @@ my $LOCK    = File::Spec->catfile($FindBin::Bin, 'pc_files.lock');
     
 print Dumper(\@PC_PATHS);
 
-$ENV{PKG_CONFIG_PATH} = join(":", @PC_PATHS);
+$ENV{PKG_CONFIG_PATH} = join($Config{path_sep}, @PC_PATHS);
 
 our $RV;
 our $S;
