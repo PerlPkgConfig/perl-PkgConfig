@@ -24,6 +24,7 @@ require 5.006;
 
 use strict;
 use warnings;
+use Config;
 use File::Spec;
 use Class::Struct; #in core since 5.004
 our $UseDebugging;
@@ -63,7 +64,7 @@ our @DEFAULT_SEARCH_PATH = qw(
 
 );
 
-my @ENV_SEARCH_PATH = split(/:/, $ENV{PKG_CONFIG_PATH} || "");
+my @ENV_SEARCH_PATH = split($Config{path_sep}, $ENV{PKG_CONFIG_PATH} || "");
 
 push @DEFAULT_SEARCH_PATH, @ENV_SEARCH_PATH;
 
