@@ -1051,7 +1051,7 @@ recognized:
 Prepend search paths in addition to the paths specified in C<$ENV{PKG_CONFIG_PATH}>
 The value is an array reference.
 
-the C<_override> variant ignores defaults (like c<PKG_CONFIG_PATH).
+the C<_override> variant ignores defaults (like C<PKG_CONFIG_PATH>).
 
 =item C<exclude_cflags>
 
