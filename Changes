@@ -1,5 +1,6 @@
 Revision history for PkgConfig
 
+0.06420 2014-02-13
   - use ; instead of : for PKG_CONFIG_PATH on MSWin32
   - support --exact-version, --atleast-version and --max-version
     (at least enough to suppor ExtUtils::PkgConfig)
