@@ -701,7 +701,10 @@ GetOptions(
     'static' => \my $UseStatic,
     'cflags' => \my $PrintCflags,
     'exists' => \my $PrintExists,
-    
+    'atleast-version=s' => \my $AtLeastVersion,
+    'exact-version=s'   => \my $ExactVersion,
+    'max-version=s'     => \my $MaxVersion,
+
     'silence-errors' => \my $SilenceErrors,
     'print-errors' => \my $PrintErrors,
     
@@ -767,7 +770,7 @@ if($WantFlags) {
 }
 
 my %pc_options;
-if($PrintExists) {
+if($PrintExists || $AtLeastVersion || $ExactVersion || $MaxVersion) {
     $pc_options{no_recurse} = 1;
 }
 
@@ -790,6 +793,31 @@ my $o = PkgConfig->find(\@FINDLIBS, %pc_options);
 if($o->errmsg) {
     print STDERR $o->errmsg unless $quiet_errors;
     exit(1);
+}
+
+if($ExactVersion) {
+    exit(2) unless $o->pkg_version eq $ExactVersion;
+}
+
+sub _is_greater_than_or_equal ($$)
+{
+    my @a = split /\./, shift;
+    my @b = split /\./, shift;
+    while(@a || @b) {
+        my $a = shift(@a) || 0;
+        my $b = shift(@b) || 0;
+        return 1 if $a > $b;
+        return 0 if $a < $b;
+    }
+    return 1;
+}
+
+if($AtLeastVersion) {
+    exit(2) unless _is_greater_than_or_equal($o->pkg_version, $AtLeastVersion);
+}
+
+if($MaxVersion) {
+    exit(2) unless _is_greater_than_or_equal($MaxVersion, $o->pkg_version);
 }
 
 if($o->print_variables) {
