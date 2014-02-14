@@ -81,6 +81,50 @@ if($^O =~ /^(gnukfreebsd|linux)$/ && -r "/etc/debian_version") {
         # /usr/lib/pkgconfig/x86_64-linux-gnu    
         # but not sure if they are used
     }
+
+} elsif($^O eq 'linux' && -r "/etc/redhat-release") {
+
+    if(-d "/usr/lib64/pkgconfig") {
+        @DEFAULT_SEARCH_PATH = qw(
+            /usr/lib64/pkgconfig
+            /usr/share/pkgconfig
+        );
+    } else {
+        @DEFAULT_SEARCH_PATH = qw(
+            /usr/lib/pkgconfig
+            /usr/share/pkgconfig
+        );
+    }
+
+} elsif($^O eq 'freebsd') {
+
+    # TODO: FreeBSD 10's version of pkg-config does not
+    # support PKG_CONFIG_DEBUG_SPEW so I can't verify
+    # the path there, but this is what it is for
+    # FreeBSD 9
+    @DEFAULT_SEARCH_PATH = qw(
+        /usr/local/libdata/pkgconfig
+        /usr/local/lib/pkgconfig
+    );
+}
+
+} elsif($^O eq 'netbsd') {
+
+    @DEFAULT_SEARCH_PATH = qw(
+        /usr/pkg/lib/pkgconfig
+        /usr/pkg/share/pkgconfig
+        /usr/X11R7/lib/pkgconfig
+        /usr/lib/pkgconfig
+    );
+} elsif($^O eq 'openbsd') {
+
+    @DEFAULT_SEARCH_PATH = qw(
+        /usr/lib/pkgconfig
+        /usr/local/lib/pkgconfig
+        /usr/local/share/pkgconfig
+        /usr/X11R6/lib/pkgconfig
+        /usr/X11R6/share/pkgconfig
+    );
 }
 
 my @ENV_SEARCH_PATH = split($Config{path_sep}, $ENV{PKG_CONFIG_PATH} || "");
