@@ -1,5 +1,27 @@
 Revision history for PkgConfig
 
+0.07020 2014-03-25
+  - use the same search path as the pkg-config normally used on these
+    systems:
+    
+      Debian Linux
+      Debian kFreeBSD
+      RedHat/CentOS/Fedora Linux
+      FreeBSD*
+      NetBSD
+      OpenBSD
+      
+      * FreeBSD 10 doesn't support PKG_CONFIG_DEBUG_SPEW so I can't verify
+        the path there, but the path is correct for FreeBSD 9
+        
+    Non .deb or .rpm based Linux distributions are not detected and will 
+    use the default non-platform specific search path.  .rpm based 
+    distributions other than RedHat/CentOS/Fedora may be misidentified 
+    as one of those.  Patches to correct unidentified or misidentified 
+    platforms would be eagerly received.
+    
+    this is a significant change in behavior, but arguably a useful one
+
 0.06420 2014-02-13
   - use ; instead of : for PKG_CONFIG_PATH on MSWin32
   - support --exact-version, --atleast-version and --max-version
