@@ -1215,9 +1215,21 @@ L<pkg-config|http://www.freedesktop.org/wiki/Software/pkg-config>
 L<http://www.openbsd.org/cgi-bin/cvsweb/src/usr.bin/pkg-config/> another 
 perl implementation of pkg-config
 
-=head1 AUTHOR & COPYRIGHT
+=head1 AUTHOR
+
+=over 4
+
+=item Original Author: M. Nunberg
+
+=item Current maintainer: Graham Ollis E<lt>plicease@cpan.org<Egt>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
 
 Copyright (C) 2012 M. Nunberg
 
-You may use and distribute this software under the same terms and conditions as
-Perl itself.
+This is free software; you can redistribute it and/or modify it under the same
+terms as the Perl 5 programming language system itself.
+
+=cut
