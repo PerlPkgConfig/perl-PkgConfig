@@ -21,6 +21,7 @@ Revision history for PkgConfig
     platforms would be eagerly received.
     
     this is a significant change in behavior, but arguably a useful one
+  - add file_path option for loading specific .pc file
 
 0.06420 2014-02-13
   - use ; instead of : for PKG_CONFIG_PATH on MSWin32

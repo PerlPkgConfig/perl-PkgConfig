@@ -106,7 +106,6 @@ if($^O =~ /^(gnukfreebsd|linux)$/ && -r "/etc/debian_version") {
         /usr/local/libdata/pkgconfig
         /usr/local/lib/pkgconfig
     );
-}
 
 } elsif($^O eq 'netbsd') {
 
@@ -361,9 +360,22 @@ sub find {
         @libraries = ($library);
     }
     
-    foreach my $lib (@libraries) {
-        $o->recursion(0);
-        $o->find_pcfile($lib);
+    if($options{file_path}) {
+    
+        if(-r $options{file_path}) {
+            $o->recursion(1);
+            $o->parse_pcfile($options{file_path});
+            $o->recursion(0);
+        } else {
+            $o->errmsg("No such file $options{file_path}\n");
+        }
+    
+    } else {
+    
+        foreach my $lib (@libraries) {
+            $o->recursion(0);
+            $o->find_pcfile($lib);
+        }
     }
     
     return $o;
@@ -1116,6 +1128,12 @@ The value is an array reference.
 
 the C<_override> variant ignores defaults (like C<PKG_CONFIG_PATH>).
 
+=item C<file_path>
+
+Specifies the full path of the of the .pc file that you wish to load.  It does
+not need to be in the search path (although any dependencies will need to be).
+Useful if you know the full path of the exact .pc file that you want.
+
 =item C<exclude_cflags>
 
 =item C<exclude_ldflags>
@@ -1123,7 +1141,6 @@ the C<_override> variant ignores defaults (like C<PKG_CONFIG_PATH>).
 =item C<exclude_cflags_override>
 
 =item C<exclude_ldflags_override>
-
 
 Some C<.pc> files specify default compiler and linker search paths, e.g.
 C<-I/usr/include -L/usr/lib>. Specifying them on the command line can be
