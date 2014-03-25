@@ -1184,8 +1184,6 @@ Currently this only works with GCC-supplied C<ld> and GNU C<ld>.
 The order of the flags is not exactly matching to that of C<pkg-config>. From my
 own observation, it seems this module does a better job, but I might be wrong.
 
-Version checking is not yet implemented.
-
 Unlike C<pkg-config>, the scripts C<--exists> function will return nonzero if
 a package B<or> any of its dependencies are missing. This differs from the
 behavior of C<pkg-config> which will just check for the definition of the
