@@ -1,5 +1,8 @@
 Revision history for PkgConfig
 
+0.07120 2014-03-26
+  - documentation tweak to improve Kwalitee score
+
 0.07020 2014-03-25
   - use the same search path as the pkg-config normally used on these
     systems:
