@@ -12,7 +12,8 @@ use File::Basename qw(fileparse);
 use Config;
 use Cwd qw( cwd chdir );
 use FindBin ();
-use base qw(Exporter);
+use Exporter;
+our @ISA = qw( Exporter );
 
 use Fcntl qw(LOCK_EX LOCK_UN LOCK_SH LOCK_NB);
 
