@@ -1222,7 +1222,7 @@ perl implementation of pkg-config
 
 =item Original Author: M. Nunberg
 
-=item Current maintainer: Graham Ollis E<lt>plicease@cpan.org<Egt>
+=item Current maintainer: Graham Ollis E<lt>plicease@cpan.orgE<gt>
 
 =back
 
