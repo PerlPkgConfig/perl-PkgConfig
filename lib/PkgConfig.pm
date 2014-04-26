@@ -67,6 +67,7 @@ our @DEFAULT_SEARCH_PATH = qw(
 if($^O =~ /^(gnukfreebsd|linux)$/ && -r "/etc/debian_version") {
     if(-x "/usr/bin/dpkg-architecture") {
         my $arch = `/usr/bin/dpkg-architecture -qDEB_HOST_MULTIARCH`;
+        chomp $arch;
         @DEFAULT_SEARCH_PATH = (
             "/usr/local/lib/$arch/pkgconfig",
             "/usr/local/lib/pkgconfig",
