@@ -1,5 +1,6 @@
 Revision history for PkgConfig
 
+0.07220 2014-04-26
   - fix possible 6.2 incompatability
   - remove unintentional new line from default paths on Debian
 
