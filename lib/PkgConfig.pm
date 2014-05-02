@@ -948,14 +948,6 @@ __END__
 
 PkgConfig - Pure-Perl Core-Only replacement for C<pkg-config>
 
-=head1 NOTE
-
-The script is not actually installed yet (i haven't settled on a good name), but
-will decide based on input in a future version.
-
-Additionally, some dependencies are superficially included for debugging, and
-will be sanitized in a future 'release/stable' version.
-
 =head1 SYNOPSIS
 
 =head2 As a replacement for C<pkg-config>
