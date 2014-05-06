@@ -1,5 +1,8 @@
 Revision history for PkgConfig
 
+0.07320 2014-05-06
+  - Use .pc files from Strawberry Perl on MSWin32 + Strawberry Perl
+
 0.07220 2014-04-26
   - fix possible 6.2 incompatability
   - remove unintentional new line from default paths on Debian

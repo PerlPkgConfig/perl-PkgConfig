@@ -23,6 +23,7 @@ t/02-iterfiles-FLISTai.t
 t/02-iterfiles-FLISTaj.t
 t/02-iterfiles-FLISTak.t
 t/02-iterfiles-FLISTal.t
+t/strawberry.t
 t/FLISTaa
 t/FLISTab
 t/FLISTac
