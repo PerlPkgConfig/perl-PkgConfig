@@ -125,6 +125,32 @@ if($^O =~ /^(gnukfreebsd|linux)$/ && -r "/etc/debian_version") {
         /usr/X11R6/lib/pkgconfig
         /usr/X11R6/share/pkgconfig
     );
+
+} elsif($^O eq 'MSWin32') {
+
+    # Caveats:
+    # 1. This pulls in Config,
+    #    which we don't load on non MSWin32
+    #    but it is in the core.
+    # 2. Slight semantic difference in that we are treating
+    #    Strawberry as the "system" rather than Windows, but
+    #    since pkg-config is rarely used in MSWin32, it is
+    #    better to have something that is useful rather than
+    #    worry about if it is exactly the same as other
+    #    platforms.
+    # 3. It is a little brittle in that Strawberry might 
+    #    one day change its layouts.  If it has and you are
+    #    reading this, please send a pull request or simply
+    #    let me know -plicease
+    require Config;
+    if($Config::Config{myuname} =~ /strawberry-perl/)
+    {
+        my($vol, $dir, $file) = File::Spec->splitpath($INC{"Config.pm"});
+        my @dirs = File::Spec->splitdir($dir);
+        splice @dirs, -3;
+        @DEFAULT_SEARCH_PATH = (File::Spec->catdir($vol, @dirs, qw( c lib pkgconfig )));
+    }
+
 }
 
 my @ENV_SEARCH_PATH = split($Config{path_sep}, $ENV{PKG_CONFIG_PATH} || "");
