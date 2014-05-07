@@ -1279,6 +1279,16 @@ perl implementation of pkg-config
 
 =back
 
+Other contributors include:
+
+=over 4
+
+=item kmx
+
+=item Sanel Zukan
+
+=back
+
 =head1 COPYRIGHT AND LICENSE
 
 Copyright (C) 2012 M. Nunberg
