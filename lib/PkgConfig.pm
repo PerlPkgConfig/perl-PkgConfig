@@ -154,6 +154,8 @@ if($^O =~ /^(gnukfreebsd|linux)$/ && -r "/etc/debian_version") {
 }
 
 my @ENV_SEARCH_PATH = split($Config{path_sep}, $ENV{PKG_CONFIG_PATH} || "");
+@ENV_SEARCH_PATH = map { s/[\r\n]*$//; $_ } @ENV_SEARCH_PATH; # trailing \r \n - sometimes happens on MSWin32
+@ENV_SEARCH_PATH = grep { -d $_ } @ENV_SEARCH_PATH;
 
 unshift @DEFAULT_SEARCH_PATH, @ENV_SEARCH_PATH;
 
@@ -780,193 +782,200 @@ use strict;
 use warnings;
 use Getopt::Long qw(:config no_ignore_case);
 use Pod::Usage;
+use Pod::Find qw(pod_where);
 
-my $quiet_errors = 1;
-my @ARGV_PRESERVE = @ARGV;
-
-my @POD_USAGE_SECTIONS = (
-    "NAME",
-    'DESCRIPTION/SCRIPT OPTIONS/USAGE',
-    "DESCRIPTION/SCRIPT OPTIONS/ARGUMENTS|ENVIRONMENT",
-    "AUTHOR & COPYRIGHT"
-);
-
-my @POD_USAGE_OPTIONS = (
-    -verbose => 99,
-    -sections => \@POD_USAGE_SECTIONS
-);
-
-GetOptions(
-    'libs' => \my $PrintLibs,
-    'libs-only-L' => \my $PrintLibsOnlyL,
-    'libs-only-l' => \my $PrintLibsOnlyl,
-    'static' => \my $UseStatic,
-    'cflags' => \my $PrintCflags,
-    'exists' => \my $PrintExists,
-    'atleast-version=s' => \my $AtLeastVersion,
-    'exact-version=s'   => \my $ExactVersion,
-    'max-version=s'     => \my $MaxVersion,
-
-    'silence-errors' => \my $SilenceErrors,
-    'print-errors' => \my $PrintErrors,
+sub run {
+    my $quiet_errors = 1;
+    my @ARGV_PRESERVE = @_;
     
-    'define-variable=s', => \my %UserVariables,
+    my @POD_USAGE_SECTIONS = (
+        "NAME",
+        'DESCRIPTION/SCRIPT OPTIONS/USAGE',
+        "DESCRIPTION/SCRIPT OPTIONS/ARGUMENTS|ENVIRONMENT",
+        "AUTHOR & COPYRIGHT"
+    );
     
-    'print-variables' => \my $PrintVariables,
-    'print-values'  => \my $PrintValues,
-    'variable=s',   => \my $OutputVariableValue,
+    my @POD_USAGE_OPTIONS = (
+        -input => pod_where({-inc => 1}, 'PkgConfig'),
+        -verbose => 99,
+        -sections => \@POD_USAGE_SECTIONS
+    );
     
-    'modversion'    => \my $PrintVersion,
-    'version',      => \my $PrintAPIversion,
-    'real-version' => \my $PrintRealVersion,
+    Getopt::Long::GetOptionsFromArray(
+        \@_,
+        'libs' => \my $PrintLibs,
+        'libs-only-L' => \my $PrintLibsOnlyL,
+        'libs-only-l' => \my $PrintLibsOnlyl,
+        'static' => \my $UseStatic,
+        'cflags' => \my $PrintCflags,
+        'exists' => \my $PrintExists,
+        'atleast-version=s' => \my $AtLeastVersion,
+        'exact-version=s'   => \my $ExactVersion,
+        'max-version=s'     => \my $MaxVersion,
     
-    'debug'         => \my $Debug,
-    'with-path=s',    => \my @ExtraPaths,
-    'env-only',     => \my $EnvOnly,
-    'guess-paths',  => \my $GuessPaths,
+        'silence-errors' => \my $SilenceErrors,
+        'print-errors' => \my $PrintErrors,
+        
+        'define-variable=s', => \my %UserVariables,
+        
+        'print-variables' => \my $PrintVariables,
+        'print-values'  => \my $PrintValues,
+        'variable=s',   => \my $OutputVariableValue,
+        
+        'modversion'    => \my $PrintVersion,
+        'version',      => \my $PrintAPIversion,
+        'real-version' => \my $PrintRealVersion,
+        
+        'debug'         => \my $Debug,
+        'with-path=s',    => \my @ExtraPaths,
+        'env-only',     => \my $EnvOnly,
+        'guess-paths',  => \my $GuessPaths,
+        
+        'h|help|?'      => \my $WantHelp
+    ) or pod2usage(@POD_USAGE_OPTIONS);
     
-    'h|help|?'      => \my $WantHelp
-) or pod2usage(@POD_USAGE_OPTIONS);
-
-
-if($WantHelp) {
-    pod2usage(@POD_USAGE_OPTIONS, -exitval => 0);
-}
-
-if($Debug) {
-    eval {
-    Log::Fu::set_log_level('PkgConfig', 'DEBUG');
-    };
-    $PkgConfig::UseDebugging = 1;
-}
-
-if($GuessPaths) {
-    PkgConfig->GuessPaths();
-}
-
-if($PrintAPIversion) {
-    print "0.20\n";
-    exit(0);
-}
-
-if($PrintRealVersion) {
-
-    printf STDOUT ("ppkg-config - cruftless pkg-config\n" .
-            "Version: %s\n", $PkgConfig::VERSION);
-    exit(0);
-}
-
-my @FINDLIBS = @ARGV or die "Must specify at least one library";
-
-if($PrintErrors) {
-    $quiet_errors = 0;
-}
-if($SilenceErrors) {
-    $quiet_errors = 1;
-}
-
-my $WantFlags = ($PrintCflags || $PrintLibs || $PrintLibsOnlyL || $PrintLibsOnlyl || $PrintVersion);
-
-if($WantFlags) {
-    $quiet_errors = 0 unless $SilenceErrors;
-}
-
-my %pc_options;
-if($PrintExists || $AtLeastVersion || $ExactVersion || $MaxVersion) {
-    $pc_options{no_recurse} = 1;
-}
-
-
-$pc_options{static} = $UseStatic;
-$pc_options{search_path} = \@ExtraPaths;
-
-if($EnvOnly) {
-    delete $pc_options{search_path};
-    $pc_options{search_path_override} = [ @ExtraPaths, @ENV_SEARCH_PATH];
-}
-
-$pc_options{print_variables} = $PrintVariables;
-$pc_options{print_values} = $PrintValues;
-$pc_options{VARS} = \%UserVariables;
-
-
-my $o = PkgConfig->find(\@FINDLIBS, %pc_options);
-
-if($o->errmsg) {
-    print STDERR $o->errmsg unless $quiet_errors;
-    exit(1);
-}
-
-if($ExactVersion) {
-    exit(2) unless $o->pkg_version eq $ExactVersion;
-}
-
-sub _is_greater_than_or_equal ($$)
-{
-    my @a = split /\./, shift;
-    my @b = split /\./, shift;
-    while(@a || @b) {
-        my $a = shift(@a) || 0;
-        my $b = shift(@b) || 0;
-        return 1 if $a > $b;
-        return 0 if $a < $b;
+    
+    if($WantHelp) {
+        pod2usage(@POD_USAGE_OPTIONS, -exitval => 0);
     }
-    return 1;
-}
-
-if($AtLeastVersion) {
-    exit(2) unless _is_greater_than_or_equal($o->pkg_version, $AtLeastVersion);
-}
-
-if($MaxVersion) {
-    exit(2) unless _is_greater_than_or_equal($MaxVersion, $o->pkg_version);
-}
-
-if($o->print_variables) {
-    while (my ($k,$v) = each %{$o->defined_variables}) {
-        print $k;
-        if($o->print_values) {
-            print "=$v";
-        } else {
-            print "\n";
+    
+    if($Debug) {
+        eval {
+        Log::Fu::set_log_level('PkgConfig', 'DEBUG');
+        };
+        $PkgConfig::UseDebugging = 1;
+    }
+    
+    if($GuessPaths) {
+        PkgConfig->GuessPaths();
+    }
+    
+    if($PrintAPIversion) {
+        print "0.20\n";
+        exit(0);
+    }
+    
+    if($PrintRealVersion) {
+    
+        printf STDOUT ("ppkg-config - cruftless pkg-config\n" .
+                "Version: %s\n", $PkgConfig::VERSION);
+        exit(0);
+    }
+    
+    my @FINDLIBS = @_ or die "Must specify at least one library\n";
+    
+    if($PrintErrors) {
+        $quiet_errors = 0;
+    }
+    if($SilenceErrors) {
+        $quiet_errors = 1;
+    }
+    
+    my $WantFlags = ($PrintCflags || $PrintLibs || $PrintLibsOnlyL || $PrintLibsOnlyl || $PrintVersion);
+    
+    if($WantFlags) {
+        $quiet_errors = 0 unless $SilenceErrors;
+    }
+    
+    my %pc_options;
+    if($PrintExists || $AtLeastVersion || $ExactVersion || $MaxVersion) {
+        $pc_options{no_recurse} = 1;
+    }
+    
+    
+    $pc_options{static} = $UseStatic;
+    $pc_options{search_path} = \@ExtraPaths;
+    
+    if($EnvOnly) {
+        delete $pc_options{search_path};
+        $pc_options{search_path_override} = [ @ExtraPaths, @ENV_SEARCH_PATH];
+    }
+    
+    $pc_options{print_variables} = $PrintVariables;
+    $pc_options{print_values} = $PrintValues;
+    $pc_options{VARS} = \%UserVariables;
+    
+    
+    my $o = PkgConfig->find(\@FINDLIBS, %pc_options);
+    
+    if($o->errmsg) {
+        print STDERR $o->errmsg unless $quiet_errors;
+        exit(1);
+    }
+    
+    if($ExactVersion) {
+        exit(2) unless $o->pkg_version eq $ExactVersion;
+    }
+    
+    sub _is_greater_than_or_equal ($$)
+    {
+        my @a = split /\./, shift;
+        my @b = split /\./, shift;
+        while(@a || @b) {
+            my $a = shift(@a) || 0;
+            my $b = shift(@b) || 0;
+            return 1 if $a > $b;
+            return 0 if $a < $b;
+        }
+        return 1;
+    }
+    
+    if($AtLeastVersion) {
+        exit(2) unless _is_greater_than_or_equal($o->pkg_version, $AtLeastVersion);
+    }
+    
+    if($MaxVersion) {
+        exit(2) unless _is_greater_than_or_equal($MaxVersion, $o->pkg_version);
+    }
+    
+    if($o->print_variables) {
+        while (my ($k,$v) = each %{$o->defined_variables}) {
+            print $k;
+            if($o->print_values) {
+                print "=$v";
+            } else {
+                print "\n";
+            }
         }
     }
-}
-
-if($OutputVariableValue) {
-    my $val = ($o->_pc_var($OutputVariableValue) or "");
-    print $val . "\n";
-}
-
-if(!$WantFlags) {
+    
+    if($OutputVariableValue) {
+        my $val = ($o->_pc_var($OutputVariableValue) or "");
+        print $val . "\n";
+    }
+    
+    if(!$WantFlags) {
+        exit(0);
+    }
+    
+    if($PrintVersion) {
+        print $o->pkg_version . "\n";
+        exit(0);
+    }
+    
+    if($PrintCflags) {
+        print join(" ", $o->get_cflags) . " ";
+    }
+    
+    if($PrintLibs) {
+        print join(" ", $o->get_ldflags) . " ";
+    }
+    
+    # handle --libs-only-L and --libs-only-l but watch the case when
+    # we got 'ppkg-config --libs-only-L --libs-only-l foo' which must behave just like
+    # 'ppkg-config --libs-only-l foo'
+    
+    if($PrintLibsOnlyl or ($PrintLibsOnlyl and $PrintLibsOnlyL)) {
+        print grep /^-l/, $o->get_ldflags;
+    } elsif ($PrintLibsOnlyL) {
+        print grep /^-[LR]/, $o->get_ldflags;
+    }
+    
+    print "\n";
     exit(0);
 }
 
-if($PrintVersion) {
-    print $o->pkg_version . "\n";
-    exit(0);
-}
-
-if($PrintCflags) {
-    print join(" ", $o->get_cflags) . " ";
-}
-
-if($PrintLibs) {
-    print join(" ", $o->get_ldflags) . " ";
-}
-
-# handle --libs-only-L and --libs-only-l but watch the case when
-# we got 'ppkg-config --libs-only-L --libs-only-l foo' which must behave just like
-# 'ppkg-config --libs-only-l foo'
-
-if($PrintLibsOnlyl or ($PrintLibsOnlyl and $PrintLibsOnlyL)) {
-    print grep /^-l/, $o->get_ldflags;
-} elsif ($PrintLibsOnlyL) {
-    print grep /^-[LR]/, $o->get_ldflags;
-}
-
-print "\n";
-exit(0);
+1;
 
 __END__
 
