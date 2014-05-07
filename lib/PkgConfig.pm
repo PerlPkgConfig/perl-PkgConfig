@@ -26,6 +26,7 @@ use strict;
 use warnings;
 use Config;
 use File::Spec;
+use File::Glob 'bsd_glob';
 use Class::Struct; #in core since 5.004
 our $UseDebugging;
 
@@ -677,6 +678,22 @@ sub get_ldflags {
     return @ret;
 }
 
+sub get_list {
+    my $self = shift;
+    my @search_paths = @{$self->search_path};
+    my @rv = ();
+    $self->recursion(0);
+    for my $d (@search_paths) {
+        next unless -d $d;
+        for my $pc (bsd_glob("$d/*.pc")) {
+            if ($pc =~ m|/([^\\\/]+)\.pc$|) {
+                $self->parse_pcfile($pc);
+                push @rv, [$1, $self->_pc_var('name') . ' - ' . $self->_pc_var('description')];
+            }
+        }
+    }
+    return @rv;
+}
 
 
 ################################################################################
@@ -806,6 +823,7 @@ sub run {
         'libs' => \my $PrintLibs,
         'libs-only-L' => \my $PrintLibsOnlyL,
         'libs-only-l' => \my $PrintLibsOnlyl,
+        'list-all' => \my $ListAll,
         'static' => \my $UseStatic,
         'cflags' => \my $PrintCflags,
         'exists' => \my $PrintExists,
@@ -862,8 +880,6 @@ sub run {
         exit(0);
     }
     
-    my @FINDLIBS = @_ or die "Must specify at least one library\n";
-    
     if($PrintErrors) {
         $quiet_errors = 0;
     }
@@ -895,7 +911,14 @@ sub run {
     $pc_options{print_values} = $PrintValues;
     $pc_options{VARS} = \%UserVariables;
     
+    if ($ListAll) {
+        my $o = PkgConfig->find([], %pc_options);
+        my @list = $o->get_list();
+        print "$_->[0]  " . " " x (20-length $_->[0]) . "$_->[1]\n" for (@list);
+        exit(0);
+    }
     
+    my @FINDLIBS = @_ or die "Must specify at least one library\n";
     my $o = PkgConfig->find(\@FINDLIBS, %pc_options);
     
     if($o->errmsg) {
@@ -1058,6 +1081,10 @@ Prints -L/-R part of "--libs". It defines library search path but without librar
 
 Prints the -l part of "--libs".
 
+=head4 --list-all
+
+List all known packages.
+
 =head4 --cflags
 
 (Also) print compiler and C preprocessor flags.
@@ -1101,7 +1128,9 @@ This returns the value of a variable defined in a package's .pc file.
 
 Print all defined variables found in the .pc files.
 
+=head4 --modversion
 
+Print version of given package.
 
 =head4 --version
 
