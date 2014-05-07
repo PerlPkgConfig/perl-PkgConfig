@@ -8,8 +8,12 @@ require 5.006;
 # e.g. Makefile.PL --script=ppkg-config --script=pkg-config
 Getopt::Long::GetOptions("script=s" => \my @scripts);
 if (@scripts) {
-  @scripts = map { "script/$_" } @scripts;
-  -f $_ or die "non-existing '$_'" for (@scripts);
+  if (grep /^none$/, @scripts) {
+    @scripts = ();
+  } else {
+    @scripts = map { "script/$_" } @scripts;
+    -f $_ or die "non-existing '$_'" for (@scripts);
+  }
 }
 else {
   @scripts = ( 'script/ppkg-config', $^O ne 'MSWin32' ? 'script/pkg-config.pl' : () );
