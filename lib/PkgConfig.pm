@@ -1215,6 +1215,41 @@ paths with those discovered by invoking L<ld(1)> and L<cpp(1)>.
 
 Currently this only works with GCC-supplied C<ld> and GNU C<ld>.
 
+=head2 INSTALL
+
+The C<Makefile.PL> that comes with C<PkgConfig> can take one or more C<--script>
+options to change of the name of the script or scripts that are installed.
+
+=over 4
+
+=item --script ppkg-config
+
+This is the default and works on all platforms
+
+=item --script pkg-config.pl
+
+This is installed by default on all platforms except for Windows, where the .pl
+may confuse the shell and cause the script to be opened in a text editor.
+
+=item --script pkg-config
+
+This is the default name of the real C<pkg-config> and so you have to specifically
+enable it if you want it.
+
+=item --script none
+
+Don't install any scripts.
+
+=back
+
+Example, install all script names:
+
+ % perl Makefile.PL --script ppkg-config --script pkg-config.pl --script pkg-config
+
+Example, don't install any scripts:
+
+ % perl Makefile.PL --script none
+
 =head2 BUGS
 
 The order of the flags is not exactly matching to that of C<pkg-config>. From my

@@ -21,6 +21,24 @@ To install this module, run the following commands:
 	make test
 	make install
 
+You may change the scripts that get installed by using the --script
+option one or more times.  For example, if you prefer not to install
+pkg-config.pl you could do this:
+
+ % perl Makefile.PL --script=ppkg-config
+
+Or if you want to use ppkg-config and pkg-config (say you are on a
+platform that  does not provide it):
+
+ % perl Makefile.PL --script=pkg-config --script=ppkg-config
+
+Or if you don't want any scripts installed at all:
+
+ % perl Makefile.PL --script=none
+
+The default is "--script=ppkg-config --script=pkg-config.pl" except for
+Windows, where the default is just "--script=ppkg-config".
+
 SUPPORT AND DOCUMENTATION
 
 After installing, you can find documentation for this module with the
