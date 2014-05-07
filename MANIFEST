@@ -9,6 +9,7 @@ PkgConfig.kpf
 README
 script/pkg-config.pl
 script/ppkg-config
+script/pkg-config
 t/00-load.t
 t/01-script_detailed.t
 t/02-iterfiles-FLISTaa.t

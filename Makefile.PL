@@ -12,7 +12,7 @@ if (@scripts) {
   -f $_ or die "non-existing '$_'" for (@scripts);
 }
 else {
-  @scripts = [ 'script/ppkg-config', $^O ne 'MSWin32' ? 'script/pkg-config.pl' : () ];
+  @scripts = ( 'script/ppkg-config', $^O ne 'MSWin32' ? 'script/pkg-config.pl' : () );
 }
 
 WriteMakefile(
