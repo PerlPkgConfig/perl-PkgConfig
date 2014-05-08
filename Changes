@@ -1,6 +1,7 @@
 Revision history for PkgConfig
 
-  - add --script option for Makefile.PL [thanks kmx]
+  - add --script option for Makefile.PL (GH#10 kmx)
+  - add --list-all option for ppkg-config script (GH#10 kmx)
 
 0.07320 2014-05-06
   - Use .pc files from Strawberry Perl on MSWin32 + Strawberry Perl
