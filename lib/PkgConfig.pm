@@ -908,7 +908,14 @@ $pc_options{VARS} = \%UserVariables;
 if($ListAll) {
     my $o = PkgConfig->find([], %pc_options);
     my @list = $o->get_list();
-    print "$_->[0]  " . " " x (20-length $_->[0]) . "$_->[1]\n" for (@list);
+    
+    # can't use List::Util::max as it wasn't core until Perl 5.8
+    my $max_length = 0;
+    foreach my $length (map { length $_->[0] } @list) {
+        $max_length = $length if $length > $max_length;
+    }
+
+    printf "%-${max_length}s %s\n", $_->[0], $_->[1] for @list;
     exit(0); 
 }
 
