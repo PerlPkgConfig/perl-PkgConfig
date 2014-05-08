@@ -1053,6 +1053,10 @@ Prints the -l part of "--libs".
 
 (Also) print compiler and C preprocessor flags.
 
+=head4 --modversion
+
+Print the version of a given package.
+
 =head4 --static
 
 Use extra dependencies and libraries if linking against a static version of the
