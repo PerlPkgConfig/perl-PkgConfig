@@ -1,5 +1,6 @@
 Revision history for PkgConfig
 
+0.07420 2014-05-09
   - add --script option for Makefile.PL (GH#10 kmx)
   - add --list-all option for ppkg-config script (GH#10 kmx)
 
