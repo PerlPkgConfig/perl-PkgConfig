@@ -1002,7 +1002,7 @@ __END__
 
 =head1 NAME
 
-PkgConfig - Pure-Perl Core-Only replacement for C<pkg-config>
+PkgConfig - Pure-Perl Core-Only replacement for pkg-config
 
 =head1 SYNOPSIS
 
@@ -1016,7 +1016,8 @@ PkgConfig - Pure-Perl Core-Only replacement for C<pkg-config>
     # -lgmodule-2.0 -ldl -lgthread-2.0 -pthread -lrt -lglib-2.0
 
 C<pkg-config.pl> can be used as an alias for C<ppkg-config> on platforms that
-support it.
+support it.  It can also be installed as C<pkg-config> though this is not
+recomended if your system has a nativ C<pkg-config>.
 
 Compare to:
     $ pkg-config --libs --cflags --static gio-2.0
