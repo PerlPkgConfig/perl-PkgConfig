@@ -2,6 +2,7 @@ use strict;
 use warnings;
 use ExtUtils::MakeMaker 6.48;
 use Getopt::Long;
+use Config;
 require 5.006;
 
 ### Makefile.PL commandline params
@@ -17,6 +18,9 @@ if (@scripts) {
 }
 else {
   @scripts = ( 'script/ppkg-config', $^O ne 'MSWin32' ? 'script/pkg-config.pl' : () );
+  if($^O eq 'MSWin32' && $Config::Config{myuname} =~ /strawberry-perl/ && eval { require 5.020 }) {
+    push @scripts, 'script/pkg-config';
+  }
 }
 
 WriteMakefile(
