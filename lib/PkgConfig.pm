@@ -998,6 +998,13 @@ if($PrintLibsOnlyl or ($PrintLibsOnlyl and $PrintLibsOnlyL)) {
 print "\n";
 exit(0);
 
+# workaround for
+# https://rt.cpan.org/Ticket/Display.html?id=96132&results=7cdf596d4e44d8f4ed9862124b28fd59
+sub run {
+    system $^X, __FILE__, @_;
+    exit $? >> 8
+}
+
 __END__
 
 =head1 NAME
