@@ -1,5 +1,6 @@
 Revision history for PkgConfig
 
+0.07520 2014-06-02
   - work around for Strawberry Perl 5.20.0.1
 
 0.07420 2014-05-09
