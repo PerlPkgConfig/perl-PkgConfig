@@ -1,0 +1,10 @@
+This distribution contains symlinks, which may be inconvenient if you
+are trying to run it out of git on Windows.  I have provided a script
+which will convert the git symlinks (which appear as just text files 
+with the target as the content on MSWin32) into honest windows symbolic
+links using the mklink command.  You will need administrator privileges:
+
+perl win32/fixlinks.pl
+
+It may not work properly if you are using the same checkout for both
+MSWin32 and cygwin.
