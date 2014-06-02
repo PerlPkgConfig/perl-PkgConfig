@@ -5,7 +5,7 @@ use File::Spec;
 # this script requires administrator privileges
 
 warn "this script requires admin privilages, which you don't appear to have"
-  unless eval { require Win32; Win32::IsAdminUser(); 1 };
+  unless eval { require Win32; Win32::IsAdminUser() };
 
 my @list = map { chomp; [split /\t/]->[1] } grep /^120000/, `git ls-files -s `;
 
