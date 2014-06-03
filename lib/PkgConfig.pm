@@ -147,10 +147,12 @@ if($^O =~ /^(gnukfreebsd|linux)$/ && -r "/etc/debian_version") {
     require Config;
     if($Config::Config{myuname} =~ /strawberry-perl/)
     {
-        my($vol, $dir, $file) = File::Spec->splitpath($INC{"Config.pm"});
+        my($vol, $dir, $file) = File::Spec->splitpath($^X);
         my @dirs = File::Spec->splitdir($dir);
         splice @dirs, -3;
-        @DEFAULT_SEARCH_PATH = (File::Spec->catdir($vol, @dirs, qw( c lib pkgconfig )));
+        my $path = (File::Spec->catdir($vol, @dirs, qw( c lib pkgconfig )));
+        $path =~ s{\\}{/}g;
+        @DEFAULT_SEARCH_PATH = $path;
     }
 
 }
