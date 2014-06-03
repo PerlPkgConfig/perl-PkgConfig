@@ -43,6 +43,7 @@ t/pc_files.tar.gz
 t/pc_files.lock
 t/PkgConfigTest.pm
 t/file_path.t
+t/pcfiledir.t
 t/perl_version.t
 LICENSE
 win32/fixlinks.pl

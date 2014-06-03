@@ -28,9 +28,10 @@ use Config;
 use File::Spec;
 use File::Glob 'bsd_glob';
 use Class::Struct; #in core since 5.004
-our $UseDebugging;
-
 use Data::Dumper;
+use File::Basename qw( dirname );
+
+our $UseDebugging;
 
 ################################################################################
 ### Check for Log::Fu                                                        ###
@@ -565,7 +566,10 @@ sub parse_pcfile {
     
     #Fold lines:
     
-    foreach my $line (@lines) {
+    my $pcfiledir = dirname $pcfile;
+    $pcfiledir =~ s{\\}{/}g;
+
+    foreach my $line ("pcfiledir=$pcfiledir", @lines) {
         $self->parse_line($line, \@eval_strings);
     }
     
