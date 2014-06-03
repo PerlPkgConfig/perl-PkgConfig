@@ -12,5 +12,5 @@ plan tests => 1;
 # this assumes that zlib comes with Strawberry,
 # which seems a fairly safe assumption.
 my $pkg = PkgConfig->find('zlib');
-ok !$pkg->errmsg, 'found zlib';
+is $pkg->errmsg, undef, 'found zlib';
 diag $pkg->errmsg if $pkg->errmsg;
