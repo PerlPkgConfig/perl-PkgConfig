@@ -1023,7 +1023,7 @@ PkgConfig - Pure-Perl Core-Only replacement for pkg-config
 
 C<pkg-config.pl> can be used as an alias for C<ppkg-config> on platforms that
 support it.  It can also be installed as C<pkg-config> though this is not
-recomended if your system has a nativ C<pkg-config>.
+recomended if your system has a native C<pkg-config>.
 
 Compare to:
     $ pkg-config --libs --cflags --static gio-2.0
