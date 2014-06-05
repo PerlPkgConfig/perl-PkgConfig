@@ -8,7 +8,7 @@ require 5.006;
 ### Makefile.PL commandline params
 # e.g. Makefile.PL --script=ppkg-config --script=pkg-config
 Getopt::Long::GetOptions("script=s" => \my @scripts);
-if (@scripts) {
+if (split /,/, @scripts) {
   if (grep /^none$/, @scripts) {
     @scripts = ();
   } else {
