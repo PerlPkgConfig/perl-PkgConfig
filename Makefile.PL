@@ -19,10 +19,39 @@ if (@scripts) {
 }
 else {
   @scripts = ( 'script/ppkg-config', $^O ne 'MSWin32' ? 'script/pkg-config.pl' : () );
-  if($^O eq 'MSWin32' && $Config::Config{myuname} =~ /strawberry-perl/ && eval q{ require 5.020 }) {
-    push @scripts, 'script/pkg-config';
+  if($^O eq 'MSWin32' && $Config{myuname} =~ /strawberry-perl/) {
+    if(eval q{ require 5.020 }) {
+      push @scripts, 'script/pkg-config';
+    
+      print "\n\n";
+      print "!!! Note that script will be installed as pkg-config  !!!\n";
+      print "!!! in addition to ppkg-config since you are using    !!!\n";
+      print "!!! Strawberry Perl 5.20 or better.  This is probably !!!\n";
+      print "!!! What you want                                     !!!\n";
+      print "\n\n";
+      
+      if($Config{myuname} =~ /strawberry-perl 5\.20\.0\.1/)
+      {
+        print "\n\n";
+        print "!!! Some of the .pc files that come with your version !!!\n";
+        print "!!! of Strawberry Perl may not work correctly with    !!!\n";
+        print "!!! this version of PkgConfig.  You should consider   !!!\n";
+        print "!!! patching them.  See README.win32 for details.     !!!\n";
+        print "\n\n";
+      }
+      
+    } else {
+      print "\n\n";
+      print "!!! You may want to consider installing the script as !!!\n";
+      print "!!! pkg-config as it can then be used by              !!!\n";
+      print "!!! ExtUtils::PkgConfig (This is how it works in      !!!\n";
+      print "!!! Strawberry 5.20 and better in fact).  Please see  !!!\n";
+      print "!!! details in README.win32 if you are interested.    !!!\n";
+      print "\n\n";
+    }
   }
 }
+
 
 WriteMakefile(
     NAME                => 'PkgConfig',
