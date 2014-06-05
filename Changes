@@ -11,7 +11,7 @@ Revision history for PkgConfig
 
 0.07520_01 2014-06-03
   - support for ${pcfiledir}
-  - base strawberry root on $^O instead of Config.pm location
+  - base strawberry root on $^X instead of Config.pm location
 
 0.07520 2014-06-02
   - work around for Strawberry Perl 5.20.0.1
