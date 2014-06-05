@@ -15,6 +15,8 @@ use FindBin ();
 use Exporter;
 our @ISA = qw( Exporter );
 
+$ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION} = 1;
+
 use Fcntl qw(LOCK_EX LOCK_UN LOCK_SH LOCK_NB);
 
 our @EXPORT = qw(

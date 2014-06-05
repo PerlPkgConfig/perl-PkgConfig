@@ -66,7 +66,11 @@ our @DEFAULT_SEARCH_PATH = qw(
 
 );
 
-if($^O =~ /^(gnukfreebsd|linux)$/ && -r "/etc/debian_version") {
+if($ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
+
+    # use the defaults regardless of detected platform
+
+} elsif($^O =~ /^(gnukfreebsd|linux)$/ && -r "/etc/debian_version") {
     if(-x "/usr/bin/dpkg-architecture") {
         my $arch = `/usr/bin/dpkg-architecture -qDEB_HOST_MULTIARCH`;
         chomp $arch;
@@ -171,7 +175,11 @@ our @DEFAULT_EXCLUDE_LFLAGS = qw(
     -R/lib -R/usr/lib -R/usr/lib64 -R/lib32 -R/lib64 -R/usr/local/lib
 );
 
-if($^O eq 'MSWin32') {
+if($ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
+
+    # use the defaults regardless of detected platform
+
+} elsif($^O eq 'MSWin32') {
 
     if($Config::Config{cc} =~ /cl(\.exe)?$/i)
     {
@@ -1337,6 +1345,31 @@ Example, install all script names:
 Example, don't install any scripts:
 
  % perl Makefile.PL --script none
+
+=head2 CAVEATS
+
+On Strawberry Perl C<ppkg-config> acts like Strawberry is the system.  
+This means that
+
+=over 4
+
+=item
+
+The .pc files that are bundled with Strawberry are searched by default.
+
+=item
+
+The Strawberry include and lib directories are used to compute the 
+exclusion lists.
+
+=back
+
+As of Strawberry 5.20.0.1 PkgConfig is bundled with Strawberry and 
+C<pkg-config> is installed by default (in addition to C<ppkg-config>,
+though the C<ppkg-config> alias is NOT bundled with Strawberry itself).
+
+For details on how to patch the .pc fils bundled with older Strawberries,
+see the C<README.win32> that comes with this Distribution.
 
 =head2 BUGS
 
