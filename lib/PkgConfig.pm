@@ -1106,7 +1106,7 @@ This is not a description of the uses of C<pkg-config> but rather a description
 of the differences between the C version and the Perl one.
 
 While C<pkg-config> is a compiled binary linked with glib, the pure-perl version
-has no such requirement, and will run wherever Perl ( >= 5.04 ) does.
+has no such requirement, and will run wherever Perl ( >= 5.6 ) does.
 
 The main supported options are the common C<--libs>, C<--cflags>,
 C<--static>, C<--exists> and C<--modversion>.
@@ -1368,7 +1368,7 @@ As of Strawberry 5.20.0.1 PkgConfig is bundled with Strawberry and
 C<pkg-config> is installed by default (in addition to C<ppkg-config>,
 though the C<ppkg-config> alias is NOT bundled with Strawberry itself).
 
-For details on how to patch the .pc fils bundled with older Strawberries,
+For details on how to patch the .pc files bundled with older Strawberries,
 see the C<README.win32> that comes with this Distribution.
 
 =head2 BUGS
