@@ -44,6 +44,12 @@ our $RV;
 our $S;
 
 my $SCRIPT = $FindBin::Bin . "/../script/ppkg-config";
+
+# Work around git on windows' lamentable lack of symbolic
+# link support
+$SCRIPT = $FindBin::Bin . "/../lib/PkgConfig.pm"
+    if $^O eq 'MSWin32' && -d '.git';
+
 sub run_common {
     my @args = @_;
     (my $ret = qx($^X $SCRIPT --env-only @args))
