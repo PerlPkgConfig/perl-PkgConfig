@@ -733,6 +733,11 @@ sub get_ldflags {
     return @ret;
 }
 
+sub get_var {
+    my($self, $name) = @_;
+    $self->_pc_var($name);
+}
+
 sub get_list {
     my $self = shift;
     my @search_paths = @{$self->search_path};
@@ -1093,6 +1098,7 @@ Compare to:
     if($o->errmsg) {
         #handle error
     } else {
+        my $prefix = $o->get_var('prefix');
         my @cflags = $o->get_cflags;
         my @ldflags = $o->get_ldflags;
     }
@@ -1303,6 +1309,10 @@ The version of the package
 =head4 I<< $o->get_ldflags >>
 
 Returns a list of compiler and linker flags, respectively.
+
+=head4 I<< $o->get_var($name) >>
+
+Get the variable with the given name.
 
 =head4 I<< PkgConfig->Guess >>
 

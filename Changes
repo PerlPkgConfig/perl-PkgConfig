@@ -1,5 +1,7 @@
 Revision history for PkgConfig
 
+  - added get_var public acessor method
+
 0.07620 2014-06-06
   - promote to production
 

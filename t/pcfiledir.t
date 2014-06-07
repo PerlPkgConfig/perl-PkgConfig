@@ -16,5 +16,5 @@ is $pkg->errmsg, undef, 'no error';
 
 isa_ok $pkg, 'PkgConfig';
 
-my $prefix = $pkg->_pc_var('prefix');
+my $prefix = $pkg->get_var('prefix');
 is $prefix, "$ENV{PKG_CONFIG_PATH}/../..", "prefix=$prefix";
