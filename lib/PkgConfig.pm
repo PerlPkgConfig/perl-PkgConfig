@@ -1383,12 +1383,26 @@ package itself (without dependencies).
 
 =head1 SEE ALSO
 
-L<ExtUtils::PkgConfig>, a wrapper around the C<pkg-config> binary
+=over 4
 
-L<pkg-config|http://www.freedesktop.org/wiki/Software/pkg-config>
+=item L<pkg-config|http://www.freedesktop.org/wiki/Software/pkg-config>
 
-L<http://www.openbsd.org/cgi-bin/cvsweb/src/usr.bin/pkg-config/> another 
-perl implementation of pkg-config
+The original C implementation
+
+=item L<ExtUtils::PkgConfig>
+
+A wrapper around the C<pkg-config> binary that can be used in your C<Makefile.PL>
+or C<Build.PL>.
+
+=item L<http://www.openbsd.org/cgi-bin/cvsweb/src/usr.bin/pkg-config/>
+
+Another perl implementation of pkg-config
+
+=item L<pkgconf|https://github.com/pkgconf/pkgconf>
+
+An alternative C implementation
+
+=back
 
 =head1 AUTHOR
 
