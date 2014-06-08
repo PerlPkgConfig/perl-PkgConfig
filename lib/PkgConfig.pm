@@ -18,7 +18,7 @@ package PkgConfig::UDefs;
 package PkgConfig;
 
 #First two digits are Perl version, second two are pkg-config version
-our $VERSION = '0.07620';
+our $VERSION = '0.07620_01';
 
 require 5.006;
 
