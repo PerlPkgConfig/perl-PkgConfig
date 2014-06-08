@@ -78,6 +78,7 @@ t/PkgConfigTest.pm
 t/file_path.t
 t/pcfiledir.t
 t/perl_version.t
+t/version_class.t
 LICENSE
 win32/fix_links.pl
 win32/fix_old_strawberry.pl

@@ -456,7 +456,19 @@ sub find {
     
         foreach my $lib (@libraries) {
             $o->recursion(0);
+            my($op,$ver);
+            ($lib,$op,$ver) = ($1,$2,PkgConfig::Version->new($3))
+                if $lib =~ /^(.*)\s+(!=|=|>=|<=|>|<)\s+(.*)$/;
             $o->find_pcfile($lib);
+            
+            if(!$o->errmsg && defined $op) {
+                $op = '==' if $op eq '=';
+                unless(eval qq{ PkgConfig::Version->new(\$o->pkg_version) $op \$ver })
+                {
+                    $o->errmsg("Requested '$lib $op $ver' but version of $lib is " . 
+                        ($o->pkg_version ? $o->pkg_version : '') . "\n");
+                }
+            }
         }
     }
     
@@ -845,6 +857,34 @@ if(caller) {
     return 1;
 }
 
+package
+    PkgConfig::Version;
+
+use overload
+    '<=>' => sub { $_[0]->cmp($_[1]) },
+    '""'  => sub { $_[0]->as_string },
+    fallback => 1;
+
+sub new {
+    my($class, $value) = @_;
+    bless [split /\./, defined $value ? $value : ''], $class;
+}
+
+sub clone {
+    __PACKAGE__->new(shift->as_string);
+}
+
+sub as_string {
+    my($self) = @_;
+    join '.', @{ $self };
+}
+
+sub cmp {
+    my($self, $other) = @_;
+    no warnings 'uninitialized';
+    defined($self->[0]) || defined($other->[0]) ? ($self->[0] <=> $other->[0]) || &cmp([@{$self}[1..$#$self]], [@{$other}[1..$#$other]]) : 0;
+}
+
 ################################################################################
 ################################################################################
 ################################################################################
@@ -982,36 +1022,20 @@ if($ListAll) {
 }
 
 my @FINDLIBS = @ARGV or die "Must specify at least one library";
+
+if($AtLeastVersion) {
+    @FINDLIBS = map { "$_ >= $AtLeastVersion" } @FINDLIBS;
+} elsif($MaxVersion) {
+    @FINDLIBS = map { "$_ <= $MaxVersion" } @FINDLIBS;
+} elsif($ExactVersion) {
+    @FINDLIBS = map { "$_ = $ExactVersion" } @FINDLIBS;
+}
+
 my $o = PkgConfig->find(\@FINDLIBS, %pc_options);
 
 if($o->errmsg) {
     print STDERR $o->errmsg unless $quiet_errors;
     exit(1);
-}
-
-if($ExactVersion) {
-    exit(2) unless $o->pkg_version eq $ExactVersion;
-}
-
-sub _is_greater_than_or_equal ($$)
-{
-    my @a = split /\./, shift;
-    my @b = split /\./, shift;
-    while(@a || @b) {
-        my $a = shift(@a) || 0;
-        my $b = shift(@b) || 0;
-        return 1 if $a > $b;
-        return 0 if $a < $b;
-    }
-    return 1;
-}
-
-if($AtLeastVersion) {
-    exit(2) unless _is_greater_than_or_equal($o->pkg_version, $AtLeastVersion);
-}
-
-if($MaxVersion) {
-    exit(2) unless _is_greater_than_or_equal($MaxVersion, $o->pkg_version);
 }
 
 if($o->print_variables) {
