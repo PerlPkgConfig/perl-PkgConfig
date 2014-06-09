@@ -1,5 +1,7 @@
 Revision history for PkgConfig
 
+0.07720 2014-06-09
+  - promote to production
   - added PERL_PKG_CONFIG_SCRIPTS environment variable
 
 0.07620_01 2014-06-08
