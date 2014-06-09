@@ -1,5 +1,7 @@
 Revision history for PkgConfig
 
+  - added PERL_PKG_CONFIG_SCRIPTS environment variable
+
 0.07620_01 2014-06-08
   - added get_var public acessor method
   - support for constraints =, !=, >=, <=, >, and <

@@ -1382,6 +1382,10 @@ Example, don't install any scripts:
 
  % perl Makefile.PL --script none
 
+You can also set the environment variable PERL_PKG_CONFIG_SCRIPTS to the
+desired --script value (separating each script name with a comma C<,>) to
+ensure that upgrades of PkgConfig do the same.
+
 =head2 CAVEATS
 
 On Strawberry Perl C<ppkg-config> acts like Strawberry is the system.  
