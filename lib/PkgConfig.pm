@@ -1442,6 +1442,14 @@ Another perl implementation of pkg-config
 
 An alternative C implementation
 
+=item L<pkg-config|https://github.com/ruby-gnome2/pkg-config>
+
+Pure Ruby implementation.
+
+=item L<pykg-config|https://pypi.python.org/pypi/pykg-config/1.2.0>
+
+A Python implementation.
+
 =back
 
 =head1 AUTHOR
