@@ -86,4 +86,13 @@ rights:
 This may not work reliably if you are using the same git repository for
 both MSWin32 and cygwin.
 
+=item run the tests
+
+As of commit cc2a2d8892 you should be able to run the full test suite on
+MSWin32 from a git repository.  This works because lib/PkgConfig.pm is
+used as the script when MSWin32 and the .git directory are detected.
+
+This leaves creating a tarball (C<make dist>) and releasing it as the
+only activities which cannot easily be performed on Windows.
+
 =back
