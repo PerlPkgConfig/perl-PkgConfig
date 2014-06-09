@@ -7,11 +7,13 @@
 # You may use and distribute this software under the same terms and conditions
 # as Perl itself.
 
-package PkgConfig::Vars;
+package
+    PkgConfig::Vars;
 # this is a namespace for .pc files to hold their variables without
 # relying on lexical scope.
 
-package PkgConfig::UDefs;
+package
+    PkgConfig::UDefs;
 # This namespace provides user-defined variables which are to override any
 # declarations within the .pc file itself.
 
