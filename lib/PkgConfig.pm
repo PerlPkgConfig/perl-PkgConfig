@@ -1248,8 +1248,8 @@ C<--silence-errors>
 
 =head3 ENVIRONMENT
 
-the C<PKG_CONFIG_PATH> variable is honored and used as a colon-delimited list
-of directories with contain C<.pc> files.
+the C<PKG_CONFIG_PATH> variable is honored and used as a colon-delimited 
+(semicolon-delimited on Windows) list of directories with contain C<.pc> files.
 
 =head2 MODULE OPTIONS
 
