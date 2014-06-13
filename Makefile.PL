@@ -58,6 +58,7 @@ else {
   }
 }
 
+eval { require Test::More }; # to get $Test::More::VERSION
 
 WriteMakefile(
     NAME                => 'PkgConfig',
@@ -69,7 +70,8 @@ WriteMakefile(
     PL_FILES            => {},
     EXE_FILES           => \@scripts,
     PREREQ_PM => {
-        'Test::More' => 0,
+        # subtest Test::More >= 0.90 && Test::More != 0.92
+        'Test::More' => ($Test::More::VERSION == 0.92 ? '0.94' : '0.90'),
     },
     BUILD_REQUIRES => {
         'Archive::Tar' => $^O eq 'MSWin32' ? '1.94' : 0,
