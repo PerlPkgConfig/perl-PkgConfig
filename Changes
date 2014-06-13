@@ -1,5 +1,6 @@
 Revision history for PkgConfig
 
+0.07820 2014-06-13
   - require Test::More >= 0.94 for subtest
     reading comprehension is key
 
