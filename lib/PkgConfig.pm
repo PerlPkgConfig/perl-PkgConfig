@@ -924,6 +924,7 @@ GetOptions(
     'list-all' => \my $ListAll,
     'static' => \my $UseStatic,
     'cflags' => \my $PrintCflags,
+    'cflags-only-I' => \my $PrintCflagsOnlyI,
     'exists' => \my $PrintExists,
     'atleast-version=s' => \my $AtLeastVersion,
     'exact-version=s'   => \my $ExactVersion,
@@ -985,7 +986,7 @@ if($SilenceErrors) {
     $quiet_errors = 1;
 }
 
-my $WantFlags = ($PrintCflags || $PrintLibs || $PrintLibsOnlyL || $PrintLibsOnlyl || $PrintVersion);
+my $WantFlags = ($PrintCflags || $PrintLibs || $PrintLibsOnlyL || $PrintCflagsOnlyI || $PrintLibsOnlyl || $PrintVersion);
 
 if($WantFlags) {
     $quiet_errors = 0 unless $SilenceErrors;
@@ -1065,12 +1066,18 @@ if($PrintVersion) {
     exit(0);
 }
 
+my @print_flags;
+
 if($PrintCflags) {
-    print join(" ", $o->get_cflags) . " ";
+    @print_flags = $o->get_cflags;
+}
+
+if($PrintCflagsOnlyI) {
+    @print_flags = grep /^-I/, $o->get_cflags;
 }
 
 if($PrintLibs) {
-    print join(" ", $o->get_ldflags) . " ";
+    @print_flags = $o->get_ldflags;
 }
 
 # handle --libs-only-L and --libs-only-l but watch the case when
@@ -1078,11 +1085,12 @@ if($PrintLibs) {
 # 'ppkg-config --libs-only-l foo'
 
 if($PrintLibsOnlyl or ($PrintLibsOnlyl and $PrintLibsOnlyL)) {
-    print grep /^-l/, $o->get_ldflags;
+    @print_flags = grep /^-l/, $o->get_ldflags;
 } elsif ($PrintLibsOnlyL) {
-    print grep /^-[LR]/, $o->get_ldflags;
+    @print_flags = grep /^-[LR]/, $o->get_ldflags;
 }
 
+print $_, " " for @print_flags;
 print "\n";
 exit(0);
 
