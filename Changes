@@ -1,5 +1,8 @@
 Revision history for PkgConfig
 
+0.08020 2014-06-17
+  - promote to production
+
 0.07920_01 2014-06-16
   - add support for the --cflags-only-I option
 
