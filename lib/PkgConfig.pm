@@ -1185,6 +1185,10 @@ List all know packages.
 
 (Also) print compiler and C preprocessor flags.
 
+=head4 --cflags-only-I
+
+Prints the -I part of "--cflags"
+
 =head4 --modversion
 
 Print the version of a given package.
@@ -1227,8 +1231,6 @@ This returns the value of a variable defined in a package's .pc file.
 =head4 --print-variables
 
 Print all defined variables found in the .pc files.
-
-
 
 =head4 --version
 
