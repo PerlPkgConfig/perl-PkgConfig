@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use ExtUtils::MakeMaker 6.48;
+use ExtUtils::MakeMaker 6.56;
 use Getopt::Long;
 use Config;
 require 5.006;
