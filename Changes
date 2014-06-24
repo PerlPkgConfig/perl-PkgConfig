@@ -1,5 +1,6 @@
 Revision history for PkgConfig
 
+0.08120 2014-06-20
   - require ExtUtils::MakeMaker 6.56 for BUILD_REQUIRES
 
 0.08020 2014-06-17
