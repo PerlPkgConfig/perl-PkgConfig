@@ -73,24 +73,70 @@ if($ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
     # use the defaults regardless of detected platform
 
 } elsif($^O =~ /^(gnukfreebsd|linux)$/ && -r "/etc/debian_version") {
+
+    my $arch;
     if(-x "/usr/bin/dpkg-architecture") {
-        my $arch = `/usr/bin/dpkg-architecture -qDEB_HOST_MULTIARCH`;
+        # works if dpkg-dev is installed
+        # rt96694
+        ($arch) = map { chomp; (split /=/)[1] }
+                  grep /^DEB_HOST_MULTIARCH=/,
+                  `/usr/bin/dpkg-architecture`;
+    } elsif(-x "/usr/bin/gcc") {
+        # works if gcc is installed
+        $arch = `/usr/bin/gcc -dumpmachine`;
         chomp $arch;
+    } else {
+        my $deb_arch = `dpkg --print-architecture`;
+        if($deb_arch =~ /^amd64/) {
+            if($^O eq 'linux') {
+                $arch = 'x86_64-linux-gnu';
+            } elsif($^O eq 'gnukfreebsd') {
+                $arch = 'x86_64-kfreebsd-gnu';
+            }
+        } elsif($deb_arch =~ /^i386/) {
+            if($^O eq 'linux') {
+                $arch = 'i386-linux-gnu';
+            } elsif($^O eq 'gnukfreebsd') {
+                $arch = 'i386-kfreebsd-gnu';
+            }
+        }
+    }
+
+    if($arch) {
+        if(scalar grep /--print-foreign-architectures/, `dpkg --help`)
+        {
+            # multi arch support / Debian 7+
+            @DEFAULT_SEARCH_PATH = (
+                "/usr/local/lib/$arch/pkgconfig",
+                "/usr/local/lib/pkgconfig",
+                "/usr/local/share/pkgconfig",
+                "/usr/lib/$arch/pkgconfig",
+                "/usr/lib/pkgconfig",
+                "/usr/share/pkgconfig",
+            );
+        } else {
+        
+            @DEFAULT_SEARCH_PATH = (
+                "/usr/local/lib/pkgconfig",
+                "/usr/local/lib/pkgconfig/$arch",
+                "/usr/local/share/pkgconfig",
+                "/usr/lib/pkgconfig",
+                "/usr/lib/pkgconfig/$arch",
+                "/usr/share/pkgconfig",
+            );
+        }
+    
+    } else {
+
         @DEFAULT_SEARCH_PATH = (
-            "/usr/local/lib/$arch/pkgconfig",
             "/usr/local/lib/pkgconfig",
             "/usr/local/share/pkgconfig",
-            "/usr/lib/$arch/pkgconfig",
             "/usr/lib/pkgconfig",
             "/usr/share/pkgconfig",
         );
-    } else {
-        # TODO: the debian 6 official pkg-config also includes
-        # /usr/local/lib/pkgconfig/x86_64-linux-gnu
-        # /usr/lib/pkgconfig/x86_64-linux-gnu    
-        # but not sure if they are used
-    }
 
+    }
+    
 } elsif($^O eq 'linux' && -r "/etc/redhat-release") {
 
     if(-d "/usr/lib64/pkgconfig") {
