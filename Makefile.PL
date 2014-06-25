@@ -90,6 +90,12 @@ WriteMakefile(
                 web  => 'https://github.com/mnunberg/perl-PkgConfig',
             },
         },
+        provides => {
+            PkgConfig => {
+                file    => "lib/PkgConfig.pm",
+                version => eval { require "lib/PkgConfig.pm"; $PkgConfig::VERSION; },
+            },
+        },
     },
     
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
