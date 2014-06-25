@@ -1,5 +1,8 @@
 Revision history for PkgConfig
 
+0.08220 2014-06-25
+  - promote to production
+
 0.08120_01 2014-06-24
   - better Debian detection and support
   - silence warning on Debian 6 or earlier when
