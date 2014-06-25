@@ -80,6 +80,10 @@ WriteMakefile(
     META_MERGE => {
         'meta-spec' => { version => 2 },
         resources => {
+            bugtracker => {
+                web  => 'https://github.com/mnunberg/perl-PkgConfig/issues',
+            },
+            homepage => 'https://metacpan.org/pod/PkgConfig',
             repository => {
                 type => 'git',
                 url  => 'https://github.com/mnunberg/perl-PkgConfig.git',
