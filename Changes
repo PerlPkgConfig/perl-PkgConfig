@@ -1,5 +1,10 @@
 Revision history for PkgConfig
 
+0.08120_01 2014-06-24
+  - better Debian detection and support
+  - silence warning on Debian 6 or earlier when
+    dpkg-dev is installed
+
 0.08120 2014-06-20
   - require ExtUtils::MakeMaker 6.56 for BUILD_REQUIRES
 
