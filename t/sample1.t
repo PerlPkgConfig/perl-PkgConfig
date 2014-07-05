@@ -3,10 +3,12 @@ use warnings;
 use Test::More;
 use FindBin ();
 
+BEGIN {
 $ENV{PKG_CONFIG_PATH} = "$FindBin::Bin/sample1/lib/pkgconfig";
 $ENV{PKG_CONFIG_PATH} =~ s{\\}{/}g;
+}
 
-use PkgConfig;
+require PkgConfig;
 note "PKG_CONFIG_PATH = $ENV{PKG_CONFIG_PATH}";
 note "PkgConfig = $INC{'PkgConfig.pm'}";
 
