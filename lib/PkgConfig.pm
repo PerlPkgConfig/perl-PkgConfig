@@ -716,7 +716,9 @@ sub parse_pcfile {
     unless ($self->no_recurse) {
         foreach (@deps) {
             my ($dep,$cmp_op,$version) = @$_;
-            $self->find_pcfile($dep);
+            my $other = PkgConfig->find($dep, static => $self->static);
+            $self->append_cflags(  $other->get_cflags );
+            $self->append_ldflags( $other->get_ldflags );
         }
     }
 }
