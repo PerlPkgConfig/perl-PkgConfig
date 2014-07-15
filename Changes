@@ -1,5 +1,8 @@
 Revision history for PkgConfig
 
+  - fixed bug where dependant components were having their variables
+    overridden by the main .pc file
+
 0.08220 2014-06-25
   - promote to production
 
