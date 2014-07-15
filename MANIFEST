@@ -82,3 +82,6 @@ t/version_class.t
 LICENSE
 win32/fix_links.pl
 win32/fix_old_strawberry.pl
+t/dep_no_inherit_vars.t
+t/dep_no_inherit_vars/lib/pkgconfig/nspr.pc
+t/dep_no_inherit_vars/lib/pkgconfig/nss.pc
