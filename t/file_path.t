@@ -7,7 +7,7 @@ use File::Spec;
 
 my $dir = tempdir( CLEANUP => 1);
 
-diag "dir = $dir";
+note "dir = $dir";
 
 my $fn = File::Spec->catfile($dir, "libfoo.pc");
 open my $fh, '>', $fn;
