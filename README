@@ -48,8 +48,11 @@ perldoc command.
 
 You can also look for information at:
 
-    RT, CPAN's request tracker
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=PkgConfig
+    GitHub, which hosts the projects official repository
+        http://github.com/mnunberg/perl-PkgConfig
+    
+    Project's issue tracker on GitHub
+        https://github.com/mnunberg/perl-PkgConfig/issues
 
     AnnoCPAN, Annotated CPAN documentation
         http://annocpan.org/dist/PkgConfig
@@ -57,8 +60,8 @@ You can also look for information at:
     CPAN Ratings
         http://cpanratings.perl.org/d/PkgConfig
 
-    Search CPAN
-        http://search.cpan.org/dist/PkgConfig/
+    MetaCpan
+        https://metacpan.org/pod/PkgConfig
 
 
 LICENSE AND COPYRIGHT
