@@ -1532,6 +1532,8 @@ Other contributors include:
 
 =over 4
 
+=item Vladimir Timofeev (vovkasm)
+
 =item kmx
 
 =item Sanel Zukan
