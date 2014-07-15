@@ -36,7 +36,7 @@ my $LOCK    = File::Spec->catfile($FindBin::Bin, 'pc_files.lock');
     $_;
 } @PC_PATHS;
     
-print Dumper(\@PC_PATHS);
+note Dumper(\@PC_PATHS);
 
 $ENV{PKG_CONFIG_PATH} = join($Config{path_sep}, @PC_PATHS);
 
