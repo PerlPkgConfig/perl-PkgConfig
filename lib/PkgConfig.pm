@@ -20,7 +20,7 @@ package
 package PkgConfig;
 
 #First two digits are Perl version, second two are pkg-config version
-our $VERSION = '0.08220_01';
+our $VERSION = '0.08220_02';
 
 require 5.006;
 
