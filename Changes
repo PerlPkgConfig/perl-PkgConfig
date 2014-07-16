@@ -1,5 +1,8 @@
 Revision history for PkgConfig
 
+0.08320 2014-07-16
+  - promote to production
+
 0.08220_02 2014-07-16
   - fix regression in last revision:
     error in dependant component is propagated to main component
