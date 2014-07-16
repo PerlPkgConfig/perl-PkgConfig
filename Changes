@@ -1,5 +1,9 @@
 Revision history for PkgConfig
 
+  - fix regression in last revision:
+    error in dependant component is propagated to main component
+  
+
 0.08220_01 2014-07-15
   - fixed bug where dependant components were having their variables
     overridden by the main .pc file

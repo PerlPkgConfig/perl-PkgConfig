@@ -725,6 +725,10 @@ sub parse_pcfile {
             my ($dep,$cmp_op,$version) = @$_;
             $dep = "$dep $cmp_op $version" if defined $cmp_op;
             my $other = PkgConfig->find($dep, %{ $self->original });
+            if($other->errmsg) {
+                $self->errmsg($other->errmsg);
+                last;
+            }
             $self->append_cflags(  $other->get_cflags );
             $self->append_ldflags( $other->get_ldflags );
         }
