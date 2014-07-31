@@ -32,6 +32,7 @@ use File::Glob 'bsd_glob';
 use Class::Struct; #in core since 5.004
 use Data::Dumper;
 use File::Basename qw( dirname );
+use Text::ParseWords qw( shellwords );
 
 our $UseDebugging;
 
@@ -615,7 +616,7 @@ sub get_requires {
 sub parse_line {
     my ($self,$line,$evals) = @_;
     no strict 'vars';
-    
+
     $line =~ s/#[^#]+$//g; # strip comments
     return unless $line;
     
@@ -656,14 +657,17 @@ sub parse_line {
     
     $value =~ s/\$\{/\$\{$varclass\::/g;
     
+    # preserve quoted space
+    $value = join ' ', map { s/(\s)/\\\\$1/g; $_ } shellwords $value
+      if $value =~ /[\\"']/;
+    
     #quoute the value string, unless quouted already
-    $value = "\"$value\"" unless $value =~ /^["']/;
+    $value = "\"$value\"";
     
     #get existent variables from our hash:
     
     
-    $value =~ s/'/"/g; #allow for interpolation
-    
+    #$value =~ s/'/"/g; #allow for interpolation
     $self->assign_var($field, $value);
     
 }
@@ -845,7 +849,7 @@ sub _split_flags {
     if(@flags == 1) {
         my $str = shift @flags;
         return () if !$str;
-        @flags = split(/\s+/, $str);
+        @flags = map { s/\\(\s)/$1/g; $_ } split(/(?<!\\)\s+/, $str);
     }
     @flags = grep $_, @flags;
     return @flags;

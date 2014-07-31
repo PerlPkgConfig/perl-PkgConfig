@@ -1,5 +1,7 @@
 Revision history for PkgConfig
 
+  - handle quoted space
+
 0.08320 2014-07-16
   - promote to production
 
