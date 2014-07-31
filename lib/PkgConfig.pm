@@ -411,6 +411,10 @@ sub _pc_var {
     return $$glob;
 }
 
+sub _quote_cvt($)  {
+    join ' ', map { s/(\s|"|')/\\$1/g; $_ } shellwords(shift)
+}
+
 sub assign_var {
     my ($self,$field,$value) = @_;
     no strict 'refs';
@@ -420,7 +424,7 @@ sub assign_var {
         log_debug("Prefix already defined by user");
         return;
     }
-    my $evalstr = sprintf('$%s = %s',
+    my $evalstr = sprintf('$%s = PkgConfig::_quote_cvt(%s)',
                     $self->_get_pc_varname($field), $value);
     
     log_debug("EVAL", $evalstr);
@@ -658,7 +662,7 @@ sub parse_line {
     $value =~ s/\$\{/\$\{$varclass\::/g;
     
     # preserve quoted space
-    $value = join ' ', map { s/(\s)/\\\\$1/g; $_ } shellwords $value
+    $value = join ' ', map { s/(["'])/\\$1/g; "'$_'" } shellwords $value
       if $value =~ /[\\"']/;
     
     #quoute the value string, unless quouted already

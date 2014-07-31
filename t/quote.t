@@ -3,11 +3,11 @@ use warnings;
 use PkgConfig;
 use FindBin ();
 use File::Spec;
-use Test::More tests => 4;
+use Test::More tests => 6;
 
 my $path = File::Spec->catfile($FindBin::Bin, 'quote');
 
-foreach my $type (qw( doublequote singlequote backslash ))
+foreach my $type (qw( doublequote singlequote backslash quotevar ))
 {
   subtest $type => sub {
   
@@ -32,4 +32,15 @@ subtest 'noquote' => sub {
   is $pkg->errmsg, undef, 'no error';
   
   is_deeply [$pkg->get_cflags], ['-I/foo/include', '-DFOO=bar'], 'list context';
+};
+
+subtest 'escape' => sub {
+  my $pkg = PkgConfig->find('escape',
+    search_path => [File::Spec->catfile($FindBin::Bin, 'quote')],
+  );
+  
+  isa_ok $pkg, 'PkgConfig';
+  is $pkg->errmsg, undef, 'no error';
+  
+  is_deeply [$pkg->get_cflags], ['-I/foo/include', '-DFOO=\\"bar_baz\\"'], 'list context';
 };
