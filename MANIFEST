@@ -86,3 +86,10 @@ t/dep_no_inherit_vars.t
 t/dep_no_inherit_vars/lib/pkgconfig/nspr.pc
 t/dep_no_inherit_vars/lib/pkgconfig/nss.pc
 t/dep_no_inherit_vars/lib/pkgconfig/foo.pc
+t/quote.t
+t/quote/backslash.pc
+t/quote/doublequote.pc
+t/quote/escape.pc
+t/quote/noquote.pc
+t/quote/quotevar.pc
+t/quote/singlequote.pc
