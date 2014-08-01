@@ -1417,7 +1417,15 @@ The version of the package
 
 =head4 I<< $o->get_ldflags >>
 
-Returns a list of compiler and linker flags, respectively.
+Returns compiler and linker flags, respectively.
+
+In list context, these methods return a list with each argument split on
+unescaped spaces.
+
+In list context returns a list of compiler and linker flags, respectively.
+
+In scalar context returns a string of compiler and linker flags with spaces
+and quotes escaped correctly.
 
 =head4 I<< $o->get_var($name) >>
 
