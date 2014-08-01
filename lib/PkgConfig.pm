@@ -391,12 +391,12 @@ struct(
 
 sub _get_pc_varname {
     my ($self,$vname_base) = @_;
-    return $self->varclass . "::" . $vname_base;
+    $self->varclass . "::" . $vname_base;
 }
 
 sub _get_pc_udefname {
     my ($self,$vname_base) = @_;
-    return $self->udefclass . "::" . $vname_base;
+    $self->udefclass . "::" . $vname_base;
 }
 
 sub _pc_var {
@@ -407,7 +407,7 @@ sub _pc_var {
     my $glob = *{$vname};
     return unless $glob;
     
-    return $$glob;
+    $$glob;
 }
 
 sub _quote_cvt($)  {
@@ -531,7 +531,7 @@ sub find {
         }
     }
     
-    return $o;
+    $o;
 }
 
 ################################################################################
@@ -612,7 +612,7 @@ sub get_requires {
         }
     }
     #log_debug(@ret);
-    return @ret;
+    @ret;
 }
 
 
@@ -837,7 +837,7 @@ sub get_list {
             }
         }
     }
-    return @rv;
+    @rv;
 }
 
 
@@ -860,7 +860,7 @@ sub _split_flags {
         @flags = shellwords $str;
     }
     @flags = grep $_, @flags;
-    return @flags;
+    @flags;
 }
 
 
@@ -905,7 +905,7 @@ sub version_2_array {
         && $chunk =~ /^\d+$/) {
         push @ret, $chunk;
     }
-    return @ret;
+    @ret;
 }
 
 
@@ -923,7 +923,7 @@ sub version_check {
             return 0;
         }
     }
-    return 1;
+    1;
 }
 
 
