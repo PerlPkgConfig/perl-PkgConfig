@@ -405,9 +405,7 @@ sub _pc_var {
     no strict 'refs';
     $vname = $self->_get_pc_varname($vname);
     my $glob = *{$vname};
-    return unless $glob;
-    
-    $$glob;
+    $glob ? $$glob : ();
 }
 
 sub _quote_cvt($)  {
