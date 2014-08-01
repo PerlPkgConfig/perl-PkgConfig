@@ -19,7 +19,8 @@ foreach my $type (qw( doublequote singlequote backslash quotevar ))
     is $pkg->errmsg, undef, 'no error';
 
     is_deeply [$pkg->get_cflags], ['-I/foo/include', '-DFOO=bar baz'], 'list context';
-    note $_ for $pkg->get_cflags;
+    is scalar $pkg->get_cflags, '-I/foo/include -DFOO=bar\\ baz', 'scalar context';
+    #note $_ for $pkg->get_cflags;
   };
 }
 
@@ -32,6 +33,7 @@ subtest 'noquote' => sub {
   is $pkg->errmsg, undef, 'no error';
   
   is_deeply [$pkg->get_cflags], ['-I/foo/include', '-DFOO=bar'], 'list context';
+  is scalar $pkg->get_cflags, '-I/foo/include -DFOO=bar', 'scalar context';
 };
 
 subtest 'escape' => sub {
@@ -42,5 +44,6 @@ subtest 'escape' => sub {
   isa_ok $pkg, 'PkgConfig';
   is $pkg->errmsg, undef, 'no error';
   
-  is_deeply [$pkg->get_cflags], ['-I/foo/include', '-DFOO=\\"bar_baz\\"'], 'list context';
+  is_deeply [$pkg->get_cflags], ['-I/foo/include', '-DFOO="bar_baz"'], 'list context';
+  is scalar $pkg->get_cflags, '-I/foo/include -DFOO=\\"bar_baz\\"', 'scalar context';
 };

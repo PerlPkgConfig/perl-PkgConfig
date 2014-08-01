@@ -786,13 +786,17 @@ sub find_pcfile {
 ################################################################################
 ################################################################################
 
+sub _return_context (@) {
+    wantarray ? (@_) : join(' ', map { s/(\s|['"])/\\$1/g; $_ } @_)
+}
+
 sub get_cflags {
     my $self = shift;
     my @cflags = @{$self->cflags};
 
     filter_omit(\@cflags, $self->exclude_cflags);
     filter_dups(\@cflags);
-    return @cflags;
+    _return_context @cflags;
 }
 
 sub get_ldflags {
@@ -812,7 +816,7 @@ sub get_ldflags {
     @ret = reverse @ret;
     filter_dups(\@ret);
     @ret = reverse(@ret);
-    return @ret;
+    _return_context @ret;
 }
 
 sub get_var {
@@ -853,7 +857,8 @@ sub _split_flags {
     if(@flags == 1) {
         my $str = shift @flags;
         return () if !$str;
-        @flags = map { s/\\(\s)/$1/g; $_ } split(/(?<!\\)\s+/, $str);
+        #@flags = map { s/\\(\s)/$1/g; $_ } split(/(?<!\\)\s+/, $str);
+        @flags = shellwords $str;
     }
     @flags = grep $_, @flags;
     return @flags;
@@ -1158,7 +1163,7 @@ if($PrintLibsOnlyl or ($PrintLibsOnlyl and $PrintLibsOnlyL)) {
     @print_flags = grep /^-[LR]/, $o->get_ldflags;
 }
 
-print $_, " " for @print_flags;
+print scalar PkgConfig::_return_context(@print_flags);
 print "\n";
 exit(0);
 
