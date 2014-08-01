@@ -58,8 +58,6 @@ else {
   }
 }
 
-eval { require Test::More }; # to get $Test::More::VERSION
-
 WriteMakefile(
     NAME                => 'PkgConfig',
     AUTHOR              => q{M. Nunberg <mnunberg@haskalah.org>},
@@ -70,7 +68,6 @@ WriteMakefile(
     PL_FILES            => {},
     EXE_FILES           => \@scripts,
     PREREQ_PM => {
-        # subtest Test::More >= 0.90 && Test::More != 0.92
         'Test::More' => '0.94',
     },
     BUILD_REQUIRES => {
