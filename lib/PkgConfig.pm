@@ -20,7 +20,7 @@ package
 package PkgConfig;
 
 #First two digits are Perl version, second two are pkg-config version
-our $VERSION = '0.08320_03';
+our $VERSION = '0.08420';
 
 use strict;
 use warnings;
