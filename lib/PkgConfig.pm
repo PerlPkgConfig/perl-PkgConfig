@@ -72,6 +72,10 @@ if($ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
 
     # use the defaults regardless of detected platform
 
+} elsif($ENV{PKG_CONFIG_LIBDIR}) {
+
+    @DEFAULT_SEARCH_PATH = split $Config{path_sep}, $ENV{PKG_CONFIG_LIBDIR};
+
 } elsif($^O =~ /^(gnukfreebsd|linux)$/ && -r "/etc/debian_version") {
 
     my $arch;
@@ -1328,8 +1332,9 @@ C<--silence-errors>
 
 =head3 ENVIRONMENT
 
-the C<PKG_CONFIG_PATH> variable is honored and used as a colon-delimited 
-(semicolon-delimited on Windows) list of directories with contain C<.pc> files.
+the C<PKG_CONFIG_PATH> and C<PKG_CONFIG_LIBDIR> variables are honored and used
+as a colon-delimited (semicolon-delimited on Windows) list of directories with
+contain C<.pc> files.
 
 =head2 MODULE OPTIONS
 
