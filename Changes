@@ -2,6 +2,8 @@ Revision history for PkgConfig
 
   - Add support for PKG_CONFIG_LIBDIR, PKG_CONFIG_ALLOW_SYSTEM_CFLAGS and PKG_CONFIG_ALLOW_SYSTEM_LIBS environment variables
   - Add support for windows registry keys
+  - Use short (MSDOS 8.3) names on Windows for search paths that contain white space
+  - Replace forward slash (/) in search paths where back slash is provided (\)
 
 0.08420 2014-08-03
   - promote to production
