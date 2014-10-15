@@ -1083,7 +1083,7 @@ if($GuessPaths) {
 }
 
 if($PrintAPIversion) {
-    print "0.20\n";
+    print "0.26\n";
     exit(0);
 }
 
