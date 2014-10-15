@@ -210,6 +210,36 @@ if($ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
         $path =~ s{\\}{/}g;
         @DEFAULT_SEARCH_PATH = $path;
     }
+    
+    my @reg_paths;
+    
+    eval q{
+        package
+            PkgConfig::WinReg;
+        
+        use Win32API::Registry 0.21 qw( :ALL );
+        
+        foreach my $top (HKEY_LOCAL_MACHINE, HKEY_CURRENT_USER) {
+            my $key;
+            RegOpenKeyEx( $top, "Software\\\\pkgconfig\\\\PKG_CONFIG_PATH", 0, KEY_READ, $key) || next;
+            my $nlen = 1024;
+            my $pos = 0;
+            my $name = '';
+            
+            while(RegEnumValue($key, $pos++, $name, $nlen, [], [], [], [])) {
+                my $type;
+                my $data;
+                RegQueryValueEx($key, $name, [], $type, $data, []);
+                push @reg_paths, $data;
+            }
+            
+            RegCloseKey( $key );
+        }
+    };
+    
+    unless($@) {
+        unshift @DEFAULT_SEARCH_PATH, @reg_paths;
+    }
 
 }
 
@@ -1353,6 +1383,23 @@ include:
 =item PKG_CONFIG_ALLOW_SYSTEM_LIBS
 
 =back
+
+If L<Win32API::Registry> is installed, on Windows (but not Cygwin) L<PkgConfig>
+will also consult these registry keys.  The names are ignored, but the values
+are paths containing C<.pc> files.
+
+=over 4
+
+=item HKEY_CURRENT_USER\Software\pkgconfig\PKG_CONFIG_PATH
+
+=item HKEY_LOCAL_MACHINE\Software\pkgconfig\PKG_CONFIG_PATH
+
+=back
+
+Registry support should be considered somewhat experimental, subject to change
+in the future, though not without good reason.  The rationale for this caveat
+is that this feature is documented in several places, but I have yet to find
+a working version that implements this feature.
 
 =head2 MODULE OPTIONS
 

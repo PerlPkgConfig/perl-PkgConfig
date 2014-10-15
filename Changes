@@ -1,6 +1,7 @@
 Revision history for PkgConfig
 
   - Add support for PKG_CONFIG_LIBDIR, PKG_CONFIG_ALLOW_SYSTEM_CFLAGS and PKG_CONFIG_ALLOW_SYSTEM_LIBS environment variables
+  - Add support for windows registry keys
 
 0.08420 2014-08-03
   - promote to production
