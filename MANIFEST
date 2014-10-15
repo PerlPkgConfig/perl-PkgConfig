@@ -93,3 +93,4 @@ t/quote/escape.pc
 t/quote/noquote.pc
 t/quote/quotevar.pc
 t/quote/singlequote.pc
+t/env.t
