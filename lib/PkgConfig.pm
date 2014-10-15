@@ -1343,6 +1343,17 @@ the C<PKG_CONFIG_PATH> and C<PKG_CONFIG_LIBDIR> variables are honored and used
 as a colon-delimited (semicolon-delimited on Windows) list of directories with
 contain C<.pc> files.
 
+Other environment variables recongized by both C<pkg-config> and L<PkgConfig>
+include:
+
+=over 4
+
+=item PKG_CONFIG_ALLOW_SYSTEM_CFLAGS
+
+=item PKG_CONFIG_ALLOW_SYSTEM_LIBS
+
+=back
+
 =head2 MODULE OPTIONS
 
 =head4 I<< PkgConfig->find >>
