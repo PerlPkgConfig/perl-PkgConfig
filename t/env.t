@@ -1,9 +1,10 @@
 use strict;
 use warnings;
 use Test::More tests => 1;
+use Env qw( @PKG_CONFIG_PATH @PKG_CONFIG_LIBDIR );
 
-$ENV{PKG_CONFIG_PATH}   = '/foo:/bar';
-$ENV{PKG_CONFIG_LIBDIR} = '/baz:/roger';
+@PKG_CONFIG_PATH   = qw( /foo /bar );
+@PKG_CONFIG_LIBDIR = qw( /baz /roger );
 
 require PkgConfig;
 
