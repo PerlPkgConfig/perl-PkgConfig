@@ -1036,6 +1036,7 @@ GetOptions(
     'libs' => \my $PrintLibs,
     'libs-only-L' => \my $PrintLibsOnlyL,
     'libs-only-l' => \my $PrintLibsOnlyl,
+    'libs-only-other' => \my $PrintLibsOnlyOther,
     'list-all' => \my $ListAll,
     'static' => \my $UseStatic,
     'cflags' => \my $PrintCflags,
@@ -1101,7 +1102,7 @@ if($SilenceErrors) {
     $quiet_errors = 1;
 }
 
-my $WantFlags = ($PrintCflags || $PrintLibs || $PrintLibsOnlyL || $PrintCflagsOnlyI || $PrintLibsOnlyl || $PrintVersion);
+my $WantFlags = ($PrintCflags || $PrintLibs || $PrintLibsOnlyL || $PrintCflagsOnlyI || $PrintLibsOnlyl || $PrintLibsOnlyOther || $PrintVersion);
 
 if($WantFlags) {
     $quiet_errors = 0 unless $SilenceErrors;
@@ -1193,6 +1194,10 @@ if($PrintCflagsOnlyI) {
 
 if($PrintLibs) {
     @print_flags = $o->get_ldflags;
+}
+
+if ($PrintLibsOnlyOther) {
+    @print_flags = grep /^-[^LRl]/, $o->get_ldflags;
 }
 
 # handle --libs-only-L and --libs-only-l but watch the case when
@@ -1291,6 +1296,11 @@ Prints -L/-R part of "--libs". It defines library search path but without librar
 =head4 --libs-only-l
 
 Prints the -l part of "--libs".
+
+=head4 --libs-only-other
+
+Prints the part of "--libs" not covered by "--libs-only-L"
+and "--libs-only-l", such as "--pthread".
 
 =head4 --list-all
 
