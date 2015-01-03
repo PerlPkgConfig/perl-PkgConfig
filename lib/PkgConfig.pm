@@ -1040,6 +1040,7 @@ GetOptions(
     'static' => \my $UseStatic,
     'cflags' => \my $PrintCflags,
     'cflags-only-I' => \my $PrintCflagsOnlyI,
+    'cflags-only-other' => \my $PrintCflagsOnlyOther,
     'exists' => \my $PrintExists,
     'atleast-version=s' => \my $AtLeastVersion,
     'exact-version=s'   => \my $ExactVersion,
@@ -1101,7 +1102,7 @@ if($SilenceErrors) {
     $quiet_errors = 1;
 }
 
-my $WantFlags = ($PrintCflags || $PrintLibs || $PrintLibsOnlyL || $PrintCflagsOnlyI || $PrintLibsOnlyl || $PrintVersion);
+my $WantFlags = ($PrintCflags || $PrintLibs || $PrintLibsOnlyL || $PrintCflagsOnlyI || $PrintCflagsOnlyOther || $PrintLibsOnlyl || $PrintVersion);
 
 if($WantFlags) {
     $quiet_errors = 0 unless $SilenceErrors;
@@ -1189,6 +1190,10 @@ if($PrintCflags) {
 
 if($PrintCflagsOnlyI) {
     @print_flags = grep /^-I/, $o->get_cflags;
+}
+
+if($PrintCflagsOnlyOther) {
+    @print_flags = grep /^-[^I]/, $o->get_cflags;
 }
 
 if($PrintLibs) {
@@ -1303,6 +1308,10 @@ List all know packages.
 =head4 --cflags-only-I
 
 Prints the -I part of "--cflags"
+
+=head4 --cflags-only-other
+
+Prints the parts of "--cflags" not covered by "--cflags-only-I".
 
 =head4 --modversion
 
