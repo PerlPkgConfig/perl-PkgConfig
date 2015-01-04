@@ -1,5 +1,9 @@
 Revision history for PkgConfig
 
+0.08626 2015-01-04
+  - Add support for --libs-only-other option (GH#18 garu)
+  - Add support for --cflags-only-other option (GH#17 garu)
+
 0.08526 2014-10-15
   - Add support for PKG_CONFIG_LIBDIR, PKG_CONFIG_ALLOW_SYSTEM_CFLAGS and PKG_CONFIG_ALLOW_SYSTEM_LIBS environment variables
   - Add support for windows registry keys

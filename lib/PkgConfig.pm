@@ -1653,6 +1653,8 @@ Other contributors include:
 
 =item Sanel Zukan
 
+=item Breno G. de Oliveira (garu)
+
 =back
 
 =head1 COPYRIGHT AND LICENSE
