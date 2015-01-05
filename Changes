@@ -1,6 +1,6 @@
 Revision history for PkgConfig
 
-0.08626 2015-01-04
+0.08626 2015-01-05
   - Add support for --libs-only-other option (GH#18 garu)
   - Add support for --cflags-only-other option (GH#17 garu)
   - Remove system multi arch library directory flags (example: -L/usr/lib/x86_64-linux-gnu) for Debian 7+
