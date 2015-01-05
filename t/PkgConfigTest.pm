@@ -130,7 +130,7 @@ sub _single_flags_test {
             
             #these files define $prefix, but don't actually use them for
             #flags:
-            if($base =~ /^(?:glu?)$/) {
+            if($base =~ /^(?:glu?|libconfig)$/) {
                 note "Skipping gl pcfiles which define but do not use 'prefix'";
                 return;
             }

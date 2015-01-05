@@ -68,6 +68,10 @@ our @DEFAULT_SEARCH_PATH = qw(
 
 );
 
+our @DEFAULT_EXCLUDE_CFLAGS = qw(-I/usr/include -I/usr/local/include);
+# don't include default link/search paths!
+our @DEFAULT_EXCLUDE_LFLAGS = map { ( "-L$_", "-R$_" ) } qw( /lib /lib32 /lib64 /usr/lib /usr/lib32 /usr/lib/64 /usr/local/lib /usr/local/lib32 /usr/local/lib64 );
+
 if($ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
 
     # use the defaults regardless of detected platform
@@ -118,6 +122,11 @@ if($ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
                 "/usr/lib/pkgconfig",
                 "/usr/share/pkgconfig",
             );
+
+            push @DEFAULT_EXCLUDE_LFLAGS, map { ("-L$_", "-R$_") } 
+                "/usr/local/lib/$arch",
+                "/usr/lib/$arch";
+
         } else {
         
             @DEFAULT_SEARCH_PATH = (
@@ -129,7 +138,7 @@ if($ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
                 "/usr/share/pkgconfig",
             );
         }
-    
+        
     } else {
 
         @DEFAULT_SEARCH_PATH = (
@@ -241,32 +250,6 @@ if($ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
         unshift @DEFAULT_SEARCH_PATH, @reg_paths;
     }
 
-}
-
-my @ENV_SEARCH_PATH = split($Config{path_sep}, $ENV{PKG_CONFIG_PATH} || "");
-
-unshift @DEFAULT_SEARCH_PATH, @ENV_SEARCH_PATH;
-
-if($^O eq 'MSWin32') {
-  @DEFAULT_SEARCH_PATH = map { s{\\}{/}g; $_ } map { /\s/ ? Win32::GetShortPathName($_) : $_ } @DEFAULT_SEARCH_PATH;
-}
-
-our @DEFAULT_EXCLUDE_CFLAGS = qw(-I/usr/include -I/usr/local/include);
-# don't include default link/search paths!
-our @DEFAULT_EXCLUDE_LFLAGS = qw(
-    -L/usr/lib -L/lib -L/lib64 -L/lib32
-    -L/usr/lib32 -L/usr/lib64
-    -L/usr/local/lib
-    
-    -R/lib -R/usr/lib -R/usr/lib64 -R/lib32 -R/lib64 -R/usr/local/lib
-);
-
-if($ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
-
-    # use the defaults regardless of detected platform
-
-} elsif($^O eq 'MSWin32') {
-
     if($Config::Config{cc} =~ /cl(\.exe)?$/i)
     {
         @DEFAULT_EXCLUDE_LFLAGS = ();
@@ -306,6 +289,14 @@ if($ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
             "-I$path/lib/pkgconfig/../../include",
         );
     }
+}
+
+my @ENV_SEARCH_PATH = split($Config{path_sep}, $ENV{PKG_CONFIG_PATH} || "");
+
+unshift @DEFAULT_SEARCH_PATH, @ENV_SEARCH_PATH;
+
+if($^O eq 'MSWin32') {
+  @DEFAULT_SEARCH_PATH = map { s{\\}{/}g; $_ } map { /\s/ ? Win32::GetShortPathName($_) : $_ } @DEFAULT_SEARCH_PATH;
 }
 
 if($ENV{PKG_CONFIG_ALLOW_SYSTEM_CFLAGS}) {
