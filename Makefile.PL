@@ -99,3 +99,10 @@ WriteMakefile(
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'PkgConfig-*' },
 );
+
+sub MY::test_via_harness
+{
+  my($self, $perl, $tests) = @_;
+  "\t$perl test.pl"
+}
+

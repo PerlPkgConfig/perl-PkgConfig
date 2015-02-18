@@ -7,4 +7,4 @@ BEGIN {
 ";
 }
 
-diag( "Testing PkgConfig $PkgConfig::VERSION, Perl $], $^X" );
+#diag( "Testing PkgConfig $PkgConfig::VERSION, Perl $], $^X" );
