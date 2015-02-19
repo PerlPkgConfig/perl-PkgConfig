@@ -95,6 +95,8 @@ sub import {
 }
 
 sub get_my_file_list {
+    plan skip_all => 'skip long running tests on ActiveState PPM build'
+      if $ENV{ACTIVESTATE_PPM_BUILD};
     my $pmfile = shift;
     my $needed = fileparse($pmfile, ".pm",".t");
     ($needed) = ($needed =~ /(FLIST.+)/);

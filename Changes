@@ -1,5 +1,9 @@
 Revision history for PkgConfig
 
+  - Parallel test if multiple CPUs can be detected (Linux, Windows)
+  - Skip long running tests under ActiveState PPM build
+    These were causing timeouts in dependencies such as Alien::Base
+
 0.08626 2015-01-05
   - Add support for --libs-only-other option (GH#18 garu)
   - Add support for --cflags-only-other option (GH#17 garu)
