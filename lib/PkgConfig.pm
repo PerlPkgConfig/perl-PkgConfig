@@ -80,6 +80,13 @@ if($ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
 
     @DEFAULT_SEARCH_PATH = split $Config{path_sep}, $ENV{PKG_CONFIG_LIBDIR};
 
+} elsif($^O eq 'solaris' && $Config{ptrsize} == 8) {
+
+    @DEFAULT_SEARCH_PATH = qw(
+        /usr/local/lib/64/pkgconfig /usr/local/share/pkgconfig
+        /usr/lib/64/pkgconfig /usr/share/pkgconfig
+    );
+
 } elsif($^O =~ /^(gnukfreebsd|linux)$/ && -r "/etc/debian_version") {
 
     my $arch;
