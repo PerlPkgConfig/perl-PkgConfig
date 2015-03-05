@@ -22,6 +22,9 @@ package PkgConfig;
 #First two digits are Perl version, second two are pkg-config version
 our $VERSION = '0.08826';
 
+$VERSION =~ /([0-9]{2})$/;
+my $compat_version = "0.$1";
+
 use strict;
 use warnings;
 use 5.006;
@@ -1042,6 +1045,7 @@ GetOptions(
     'cflags-only-other' => \my $PrintCflagsOnlyOther,
     'exists' => \my $PrintExists,
     'atleast-version=s' => \my $AtLeastVersion,
+    'atleast-pkgconfig-version=s' => \my $AtLeastPkgConfigVersion,
     'exact-version=s'   => \my $ExactVersion,
     'max-version=s'     => \my $MaxVersion,
 
@@ -1083,8 +1087,16 @@ if($GuessPaths) {
 }
 
 if($PrintAPIversion) {
-    print "0.26\n";
+    print $compat_version, "\n";
     exit(0);
+}
+
+if($AtLeastPkgConfigVersion) {
+    if($AtLeastPkgConfigVersion > $compat_version) {
+        exit(1);
+    } else {
+        exit(0);
+    }
 }
 
 if($PrintRealVersion) {
