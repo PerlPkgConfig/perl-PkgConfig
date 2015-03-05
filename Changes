@@ -1,5 +1,6 @@
 Revision history for PkgConfig
 
+0.08926 2015-03-05
   - Add --atleast-pkgconfig-version option
 
 0.08826 2015-02-23
