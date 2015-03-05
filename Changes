@@ -1,5 +1,7 @@
 Revision history for PkgConfig
 
+  - Add --atleast-pkgconfig-version option
+
 0.08826 2015-02-23
   - Use 64bit pkgconfig paths on 64 bit solaris
 
