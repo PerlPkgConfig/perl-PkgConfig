@@ -23,7 +23,7 @@ package PkgConfig;
 our $VERSION = '0.08826';
 
 $VERSION =~ /([0-9]{2})$/;
-my $compat_version = "0.$1";
+my $compat_version = $1;
 
 use strict;
 use warnings;
@@ -1087,16 +1087,16 @@ if($GuessPaths) {
 }
 
 if($PrintAPIversion) {
-    print $compat_version, "\n";
+    print '0.', $compat_version, "\n";
     exit(0);
 }
 
 if($AtLeastPkgConfigVersion) {
-    if($AtLeastPkgConfigVersion > $compat_version) {
-        exit(1);
-    } else {
-        exit(0);
-    }
+    my($major,$minor,$patch) = split /\./, $AtLeastPkgConfigVersion;
+    exit 1 if $major > 0;
+    exit 1 if $minor > $compat_version;
+    exit 1 if $minor == $compat_version && $patch > 0;
+    exit 0;
 }
 
 if($PrintRealVersion) {
