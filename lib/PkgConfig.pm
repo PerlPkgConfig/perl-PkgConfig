@@ -68,7 +68,6 @@ our $VarClassSerial = 0;
 our @DEFAULT_SEARCH_PATH = qw(
     /usr/local/lib/pkgconfig /usr/local/share/pkgconfig
     /usr/lib/pkgconfig /usr/share/pkgconfig
-
 );
 
 our @DEFAULT_EXCLUDE_CFLAGS = qw(-I/usr/include -I/usr/local/include);
@@ -89,6 +88,20 @@ if($ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
         /usr/local/lib/64/pkgconfig /usr/local/share/pkgconfig
         /usr/lib/64/pkgconfig /usr/share/pkgconfig
     );
+
+} elsif($^O eq 'linux' and -f '/etc/gentoo-release') {
+    # OK, we're running Gentoo
+    @DEFAULT_SEARCH_PATH = qw!
+        /usr/lib/pkgconfig/ /usr/share/pkgconfig/
+    !;
+
+    # Are we running a 64 bit system?
+    my $arch = $Config{myarchname};
+    if ($arch eq 'x86_64-linux') {
+        # We do
+        # add /usr/lib64/pkgconfig to @DEFAULT_SEARCH_PATH array
+        push @DEFAULT_SEARCH_PATH, '/usr/lib64/pkgconfig';
+    }
 
 } elsif($^O =~ /^(gnukfreebsd|linux)$/ && -r "/etc/debian_version") {
 
@@ -309,12 +322,8 @@ if($^O eq 'MSWin32') {
   @DEFAULT_SEARCH_PATH = map { s{\\}{/}g; $_ } map { /\s/ ? Win32::GetShortPathName($_) : $_ } @DEFAULT_SEARCH_PATH;
 }
 
-if($ENV{PKG_CONFIG_ALLOW_SYSTEM_CFLAGS}) {
+if($ENV{PKG_CONFIG_ALLOW_SYSTEM_CFLAGS} or $ENV{PKG_CONFIG_ALLOW_SYSTEM_LIBS}) {
     @DEFAULT_EXCLUDE_CFLAGS = ();
-}
-
-if($ENV{PKG_CONFIG_ALLOW_SYSTEM_LIBS}) {
-    @DEFAULT_EXCLUDE_LFLAGS = ();
 }
 
 my $LD_OUTPUT_RE = qr/
@@ -1048,9 +1057,9 @@ GetOptions(
     'atleast-pkgconfig-version=s' => \my $AtLeastPkgConfigVersion,
     'exact-version=s'   => \my $ExactVersion,
     'max-version=s'     => \my $MaxVersion,
-
     'silence-errors' => \my $SilenceErrors,
     'print-errors' => \my $PrintErrors,
+    'errors-to-stdout' => \my $ErrToStdOut,
     
     'define-variable=s', => \my %UserVariables,
     
@@ -1109,8 +1118,17 @@ if($PrintRealVersion) {
 if($PrintErrors) {
     $quiet_errors = 0;
 }
+
 if($SilenceErrors) {
     $quiet_errors = 1;
+}
+
+# This option takes precedence over all other options
+# be it:
+# --silence-errors
+# or --print-errors
+if ($ErrToStdOut) {
+    $quiet_errors = 2;
 }
 
 my $WantFlags = ($PrintCflags || $PrintLibs || $PrintLibsOnlyL || $PrintCflagsOnlyI || $PrintCflagsOnlyOther || $PrintLibsOnlyOther || $PrintLibsOnlyl || $PrintVersion);
@@ -1164,7 +1182,14 @@ if($AtLeastVersion) {
 my $o = PkgConfig->find(\@FINDLIBS, %pc_options);
 
 if($o->errmsg) {
-    print STDERR $o->errmsg unless $quiet_errors;
+    # --errors-to-stdout
+    if ($quiet_errors eq 2) {
+        print STDOUT $o->errmsg;
+    # --print-errors
+    } elsif ($quiet_errors eq 1) {
+        print STDERR $o->errmsg;
+    }
+    # --silence-errors
     exit(1);
 }
 
@@ -1395,10 +1420,13 @@ arguments
 
 =head4 --print-errors
 
-This makes all errors noisy and takes precedence over
+Print errors to STDERR and takes precedence over
 C<--silence-errors>
 
+=head4 --errors-to-stdout
 
+Print errors to STDOUT and takes precedence over
+C<--print-errors>
 
 =head3 ENVIRONMENT
 
