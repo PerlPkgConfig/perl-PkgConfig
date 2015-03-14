@@ -65,7 +65,6 @@ our $VarClassSerial = 0;
 our @DEFAULT_SEARCH_PATH = qw(
     /usr/local/lib/pkgconfig /usr/local/share/pkgconfig
     /usr/lib/pkgconfig /usr/share/pkgconfig
-
 );
 
 our @DEFAULT_EXCLUDE_CFLAGS = qw(-I/usr/include -I/usr/local/include);
@@ -306,12 +305,8 @@ if($^O eq 'MSWin32') {
   @DEFAULT_SEARCH_PATH = map { s{\\}{/}g; $_ } map { /\s/ ? Win32::GetShortPathName($_) : $_ } @DEFAULT_SEARCH_PATH;
 }
 
-if($ENV{PKG_CONFIG_ALLOW_SYSTEM_CFLAGS}) {
+if($ENV{PKG_CONFIG_ALLOW_SYSTEM_CFLAGS} or $ENV{PKG_CONFIG_ALLOW_SYSTEM_LIBS}) {
     @DEFAULT_EXCLUDE_CFLAGS = ();
-}
-
-if($ENV{PKG_CONFIG_ALLOW_SYSTEM_LIBS}) {
-    @DEFAULT_EXCLUDE_LFLAGS = ();
 }
 
 my $LD_OUTPUT_RE = qr/
