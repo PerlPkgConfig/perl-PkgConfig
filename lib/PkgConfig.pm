@@ -87,6 +87,26 @@ if($ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
         /usr/lib/64/pkgconfig /usr/share/pkgconfig
     );
 
+} elsif($^O eq 'linux' and -f '/etc/gentoo-release') {
+    # OK, we're running Gentoo
+
+    # Are we running a 64 bit system?
+    my $arch = $Config{myarchname};
+
+    if ($arch eq 'x86_64-linux') {
+        # We do
+
+        @DEFAULT_SEARCH_PATH = qw!
+          /usr/lib64/pkgconfig/ /usr/share/pkgconfig/
+        !;
+
+    } elsif ($arch =~ /(i686|i486)/) {
+        # if we're running a x86 system
+        @DEFAULT_SEARCH_PATH = qw!
+          /usr/lib/pkgconfig/ /usr/share/pkgconfig/
+        !;
+    }
+
 } elsif($^O =~ /^(gnukfreebsd|linux)$/ && -r "/etc/debian_version") {
 
     my $arch;
