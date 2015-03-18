@@ -90,6 +90,24 @@ if($ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
         /usr/lib/64/pkgconfig /usr/share/pkgconfig
     );
 
+} elsif($^O eq 'linux' and -f '/etc/gentoo-release') {
+    # OK, we're running on Gentoo
+
+    # Fetch ptrsize value
+    my $ptrsize = $Config{ptrsize};
+
+    # Are we running on 64 bit system?
+    if ($ptrsize eq 8) {
+        # We do
+        @DEFAULT_SEARCH_PATH = qw!
+          /usr/lib64/pkgconfig/ /usr/share/pkgconfig/
+        !;
+    } else {
+        # We're running on a 32 bit system (hopefully)
+        @DEFAULT_SEARCH_PATH = qw!
+          /usr/lib/pkgconfig/ /usr/share/pkgconfig/
+        !;
+    }
 } elsif($^O =~ /^(gnukfreebsd|linux)$/ && -r "/etc/debian_version") {
 
     my $arch;
