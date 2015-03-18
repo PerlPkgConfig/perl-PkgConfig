@@ -24,6 +24,11 @@ elsif(-r "/proc/cpuinfo")
   $cpu_count = scalar grep /^processor\s/, <$fh>;
   close $fh;
 }
+elsif($^O eq 'darwin')
+{
+  $cpu_count = `sysctl -n hw.ncpu`;
+  chomp $cpu_count;
+}
 
 if(defined $cpu_count && $cpu_count > 0)
 {
