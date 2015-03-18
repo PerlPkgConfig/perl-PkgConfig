@@ -90,6 +90,26 @@ if($ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
         /usr/lib/64/pkgconfig /usr/share/pkgconfig
     );
 
+} elsif($^O eq 'linux' and -f '/etc/gentoo-release') {
+    # OK, we're running Gentoo
+
+    # Are we running a 64 bit system?
+    my $arch = $Config{myarchname};
+
+    if ($arch eq 'x86_64-linux') {
+        # We do
+
+        @DEFAULT_SEARCH_PATH = qw!
+          /usr/lib64/pkgconfig/ /usr/share/pkgconfig/
+        !;
+
+    } elsif ($arch =~ /(i686|i486)/) {
+        # if we're running a x86 system
+        @DEFAULT_SEARCH_PATH = qw!
+          /usr/lib/pkgconfig/ /usr/share/pkgconfig/
+        !;
+    }
+
 } elsif($^O =~ /^(gnukfreebsd|linux)$/ && -r "/etc/debian_version") {
 
     my $arch;
@@ -1051,6 +1071,7 @@ GetOptions(
 
     'silence-errors' => \my $SilenceErrors,
     'print-errors' => \my $PrintErrors,
+    'errors-to-stdout' => \my $ErrToStdOut,
     
     'define-variable=s', => \my %UserVariables,
     
@@ -1109,8 +1130,18 @@ if($PrintRealVersion) {
 if($PrintErrors) {
     $quiet_errors = 0;
 }
+
 if($SilenceErrors) {
     $quiet_errors = 1;
+}
+
+# This option takes precedence over all other options
+# be it:
+# --silence-errors
+# or
+# --print-errors
+if ($ErrToStdOut) {
+ $quiet_errors = 2;
 }
 
 my $WantFlags = ($PrintCflags || $PrintLibs || $PrintLibsOnlyL || $PrintCflagsOnlyI || $PrintCflagsOnlyOther || $PrintLibsOnlyOther || $PrintLibsOnlyl || $PrintVersion);
@@ -1164,7 +1195,14 @@ if($AtLeastVersion) {
 my $o = PkgConfig->find(\@FINDLIBS, %pc_options);
 
 if($o->errmsg) {
-    print STDERR $o->errmsg unless $quiet_errors;
+    # --errors-to-stdout
+    if ($quiet_errors eq 2) {
+        print STDOUT $o->errmsg;
+    # --print-errors
+    } elsif ($quiet_errors eq 1) {
+        print STDERR $o->errmsg;
+    }
+    # --silence-errors
     exit(1);
 }
 
@@ -1395,10 +1433,13 @@ arguments
 
 =head4 --print-errors
 
-This makes all errors noisy and takes precedence over
+Print errors to STDERR and takes precedence over
 C<--silence-errors>
 
+=head4 --errors-to-stdout
 
+Print errors to STDOUT and takes precedence over
+C<--print-errors>
 
 =head3 ENVIRONMENT
 
