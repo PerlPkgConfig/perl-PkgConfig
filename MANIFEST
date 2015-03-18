@@ -92,6 +92,6 @@ t/strawberry/c/lib/pkgconfig/proj.pc
 t/strawberry/c/lib/pkgconfig/xpm.pc
 t/strawberry/c/lib/pkgconfig/zlib.pc
 t/version_class.t
-test.pl
+run_test.pl
 win32/fix_links.pl
 win32/fix_old_strawberry.pl

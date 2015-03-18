@@ -103,6 +103,6 @@ WriteMakefile(
 sub MY::test_via_harness
 {
   my($self, $perl, $tests) = @_;
-  "\t$perl test.pl"
+  "\t$perl run_test.pl"
 }
 
