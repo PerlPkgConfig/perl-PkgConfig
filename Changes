@@ -1,5 +1,9 @@
 Revision history for PkgConfig
 
+0.09026 2015-03-18
+  - Add --errors-to-stdout option
+  - Support for Gentoo Linux
+
 0.08926 2015-03-05
   - Add --atleast-pkgconfig-version option
 
