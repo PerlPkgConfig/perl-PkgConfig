@@ -1070,6 +1070,7 @@ GetOptions(
     'silence-errors' => \my $SilenceErrors,
     'print-errors' => \my $PrintErrors,
     'errors-to-stdout' => \my $ErrToStdOut,
+    'short-errors'     => \my $ShortErrors,
     
     'define-variable=s', => \my %UserVariables,
     
@@ -1433,6 +1434,10 @@ arguments
 
 Print errors to STDERR and takes precedence over
 C<--silence-errors>
+
+=head4 --short-errors
+
+Ignored, but recognized for compatability.
 
 =head4 --errors-to-stdout
 
