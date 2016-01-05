@@ -1,5 +1,6 @@
 Revision history for PkgConfig
 
+0.09026_01 2016-01-05
   - Remove use of flock
     It isn't portable and was causing hang/failures on NFS
   - Add --short-errors option
