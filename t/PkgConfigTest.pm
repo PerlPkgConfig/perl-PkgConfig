@@ -17,8 +17,6 @@ our @ISA = qw( Exporter );
 
 $ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION} = 1;
 
-use Fcntl qw(LOCK_EX LOCK_UN LOCK_SH LOCK_NB);
-
 our @EXPORT = qw(
     expect_flags run_common $RV $S);
 
@@ -61,37 +59,6 @@ sub run_common {
 sub expect_flags {
     my ($flags,$msg) = @_;
     like($S, qr/\Q$flags\E/, $msg);
-}
-
-# For concurrency, it is necessary to maintain a lock here. The
-# lock should remain in place
-sub extract_our_tarball
-{
-    open my $fh, "+<", $LOCK or die "$LOCK: $!";
-    my $extract_dir = File::Spec->catfile($FindBin::Bin, 'usr');
-
-    do {
-        local $SIG{ALRM} = sub { die 'timeout waiting for lock' };
-        alarm 10;
-        flock($fh, LOCK_EX); # Block.
-        alarm 0;
-    };
-    
-    # If we have a shared lock, let us check if the directory exists:
-    if (-d $extract_dir) {
-        return;
-    }
-    
-    my $tar = Archive::Tar->new($TARBALL);
-    my $cwd = cwd();
-    chdir $FindBin::Bin;
-    $tar->extract;
-    chdir $cwd;
-}
-
-sub import {
-    extract_our_tarball();
-    goto &Exporter::import;
 }
 
 sub get_my_file_list {

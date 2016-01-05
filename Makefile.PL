@@ -72,7 +72,6 @@ WriteMakefile(
     },
     BUILD_REQUIRES => {
         'Archive::Tar'        => $^O eq 'MSWin32' ? '1.94' : 0,
-        'Fcntl'               => 0,
         'ExtUtils::MakeMaker' => '6.56',
     },
     META_MERGE => {
