@@ -6,7 +6,6 @@ use Config;
 use Test::More;
 use File::Basename;
 use Data::Dumper;
-use Archive::Tar;
 use File::Spec;
 use File::Basename qw(fileparse);
 use Config;
