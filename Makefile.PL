@@ -92,6 +92,7 @@ WriteMakefile(
                 version => eval { require "lib/PkgConfig.pm"; $PkgConfig::VERSION; },
             },
         },
+        x_IRC => "irc://irc.perl.org/#native",
     },
     
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
