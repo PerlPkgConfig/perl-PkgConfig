@@ -6,3 +6,4 @@
 /MANIFEST.bak
 /PkgConfig-*
 /Makefile.old
+/t/02-iterfiles-FLIST??.t

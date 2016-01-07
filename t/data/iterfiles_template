@@ -6,7 +6,13 @@ use FindBin ();
 use lib $FindBin::Bin;
 use PkgConfigTest;
 
-my $flist = PkgConfigTest::get_my_file_list(__FILE__);
+plan skip_all => 'skip long running tests on ActiveState PPM build'
+  if $ENV{ACTIVESTATE_PPM_BUILD};
+
+my $flist = [qw(
+#LIST
+)];
+
 PkgConfigTest::run_exists_test($flist, __FILE__);
 PkgConfigTest::run_flags_test($flist, __FILE__);
 done_testing();

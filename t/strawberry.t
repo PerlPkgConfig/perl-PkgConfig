@@ -17,7 +17,7 @@ my $pkg = PkgConfig->find('zlib');
 is $pkg->errmsg, undef, 'found zlib';
 diag $pkg->errmsg if $pkg->errmsg;
 
-my $dir = File::Spec->catdir($FindBin::Bin, qw( strawberry c lib pkgconfig ));
+my $dir = File::Spec->catdir($FindBin::Bin, qw( data strawberry c lib pkgconfig ));
 $dir =~ s{\\}{/}g;
 
 my @pcfiles = do {

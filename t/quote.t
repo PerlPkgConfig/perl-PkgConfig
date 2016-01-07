@@ -5,14 +5,14 @@ use FindBin ();
 use File::Spec;
 use Test::More tests => 6;
 
-my $path = File::Spec->catfile($FindBin::Bin, 'quote');
+my $path = File::Spec->catfile($FindBin::Bin, 'data', 'quote');
 
 foreach my $type (qw( doublequote singlequote backslash quotevar ))
 {
   subtest $type => sub {
   
     my $pkg = PkgConfig->find($type,
-      search_path => [File::Spec->catfile($FindBin::Bin, 'quote')],
+      search_path => [File::Spec->catfile($FindBin::Bin, 'data', 'quote')],
     );
     
     isa_ok $pkg, 'PkgConfig';
@@ -26,7 +26,7 @@ foreach my $type (qw( doublequote singlequote backslash quotevar ))
 
 subtest 'noquote' => sub {
   my $pkg = PkgConfig->find('noquote',
-    search_path => [File::Spec->catfile($FindBin::Bin, 'quote')],
+    search_path => [File::Spec->catfile($FindBin::Bin, 'data', 'quote')],
   );
   
   isa_ok $pkg, 'PkgConfig';
@@ -38,7 +38,7 @@ subtest 'noquote' => sub {
 
 subtest 'escape' => sub {
   my $pkg = PkgConfig->find('escape',
-    search_path => [File::Spec->catfile($FindBin::Bin, 'quote')],
+    search_path => [File::Spec->catfile($FindBin::Bin, 'data', 'quote')],
   );
   
   isa_ok $pkg, 'PkgConfig';

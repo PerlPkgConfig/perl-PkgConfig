@@ -3,7 +3,7 @@ use warnings;
 use Test::More tests => 4;
 use FindBin ();
 
-$ENV{PKG_CONFIG_PATH} = "$FindBin::Bin/usr/lib/pkgconfig";
+$ENV{PKG_CONFIG_PATH} = "$FindBin::Bin/data/usr/lib/pkgconfig";
 $ENV{PKG_CONFIG_PATH} =~ s{\\}{/}g;
 
 use_ok 'PkgConfig';

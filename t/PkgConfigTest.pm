@@ -19,8 +19,8 @@ $ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION} = 1;
 our @EXPORT = qw(
     expect_flags run_common $RV $S);
 
-my @PC_PATHS = qw(usr/lib/pkgconfig usr/share/pkgconfig
-                usr/local/lib/pkgconfig usr/local/share/pkgconfig);
+my @PC_PATHS = qw(data/usr/lib/pkgconfig data/usr/share/pkgconfig
+                data/usr/local/lib/pkgconfig data/usr/local/share/pkgconfig);
                 
 
 
@@ -58,22 +58,6 @@ sub run_common {
 sub expect_flags {
     my ($flags,$msg) = @_;
     like($S, qr/\Q$flags\E/, $msg);
-}
-
-sub get_my_file_list {
-    plan skip_all => 'skip long running tests on ActiveState PPM build'
-      if $ENV{ACTIVESTATE_PPM_BUILD};
-    my $pmfile = shift;
-    my $needed = fileparse($pmfile, ".pm",".t");
-    ($needed) = ($needed =~ /(FLIST.+)/);
-    die "Invalid file $pmfile" unless $needed;
-    my $file_list = File::Spec->catfile($FindBin::Bin, $needed);
-    open my $fh, "<", $file_list or die "$file_list: $!";
-    note $file_list;
-    my @lines = <$fh>;
-    @lines = map { $_ =~ s/\s+$//g; $_ } @lines;
-    @lines = map { File::Spec->catfile($FindBin::Bin, $_) } @lines;
-    return \@lines;
 }
 
 sub run_exists_test {

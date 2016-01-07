@@ -4,7 +4,7 @@ use Test::More;
 use FindBin ();
 
 BEGIN {
-$ENV{PKG_CONFIG_PATH} = "$FindBin::Bin/dep_no_inherit_vars/lib/pkgconfig";
+$ENV{PKG_CONFIG_PATH} = "$FindBin::Bin/data/dep_no_inherit_vars/lib/pkgconfig";
 $ENV{PKG_CONFIG_PATH} =~ s{\\}{/}g;
 }
 

@@ -11,8 +11,7 @@ just as the c version works on Unix style platforms.  Unfortunately,
 the version included with 5.20.0.1 is incompatible with the version
 on CPAN.
 
-This will be fixed in the next version of Strawberry which will be
-either the first in the 5.20.1 series or 5.20.0.2.
+This was fixed in the next version of Strawberry.
 
 You may optionally patch the .pc files that come with Strawberry Perl
 5.20.0.1 or earlier to either get the same pkg-config capability which
