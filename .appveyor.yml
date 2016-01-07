@@ -4,6 +4,10 @@ install:
   - choco install strawberryperl
   - SET PATH=C:\Perl5\bin;C:\strawberry\c\bin;C:\strawberry\perl\site\bin;C:\strawberry\perl\bin;%PATH%
   - perl -v
+  - del /q script\*
+  - cp lib\PkgConfig.pm script\pkg-config
+  - cp lib\PkgConfig.pm script\pkg-config.pl
+  - cp lib\PkgConfig.pm script\ppkg-config
 
 build: off
 
