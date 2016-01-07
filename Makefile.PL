@@ -85,6 +85,7 @@ WriteMakefile(
                 url  => 'https://github.com/PerlPkgConfig/perl-PkgConfig.git',
                 web  => 'https://github.com/PerlPkgConfig/perl-PkgConfig',
             },
+            x_IRC => "irc://irc.perl.org/#native",
         },
         provides => {
             PkgConfig => {
@@ -92,7 +93,6 @@ WriteMakefile(
                 version => eval { require "lib/PkgConfig.pm"; $PkgConfig::VERSION; },
             },
         },
-        x_IRC => "irc://irc.perl.org/#native",
     },
     
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
