@@ -8,6 +8,6 @@ install:
 build: off
 
 test_script:
-  - prove -bv t
+  - prove -lv t
 
 shallow_clone: true
