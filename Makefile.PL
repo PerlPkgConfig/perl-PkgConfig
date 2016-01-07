@@ -77,13 +77,13 @@ WriteMakefile(
         'meta-spec' => { version => 2 },
         resources => {
             bugtracker => {
-                web  => 'https://github.com/mnunberg/perl-PkgConfig/issues',
+                web  => 'https://github.com/PerlPkgConfig/perl-PkgConfig/issues',
             },
             homepage => 'https://metacpan.org/pod/PkgConfig',
             repository => {
                 type => 'git',
-                url  => 'https://github.com/mnunberg/perl-PkgConfig.git',
-                web  => 'https://github.com/mnunberg/perl-PkgConfig',
+                url  => 'https://github.com/PerlPkgConfig/perl-PkgConfig.git',
+                web  => 'https://github.com/PerlPkgConfig/perl-PkgConfig',
             },
         },
         provides => {
