@@ -1,5 +1,9 @@
 Revision history for PkgConfig
 
+0.09026_02 2016-01-07
+  - Test and development changes only.  No functional or
+    bug fixes to PkgConfig.pm itself.
+
 0.09026_01 2016-01-05
   - Remove use of flock
     It isn't portable and was causing hang/failures on NFS
