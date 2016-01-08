@@ -1,5 +1,8 @@
 Revision history for PkgConfig
 
+0.10026 2015-01-08
+  - promote to production
+
 0.09026_02 2016-01-07
   - Test and development changes only.  No functional or
     bug fixes to PkgConfig.pm itself.
