@@ -16,7 +16,7 @@ This was fixed in the next version of Strawberry.
 You may optionally patch the .pc files that come with Strawberry Perl
 5.20.0.1 or earlier to either get the same pkg-config capability which
 will come with future versions of Strawberry (if you are using 5.18
-or earlier) or to fix the incompatability that was introduced in
+or earlier) or to fix the incompatibility that was introduced in
 Strawberry 5.20.0.1.  Simply follow these steps:
 
 =over 4

@@ -1437,7 +1437,7 @@ C<--silence-errors>
 
 =head4 --short-errors
 
-Ignored, but recognized for compatability.
+Ignored, but recognized for compatibility.
 
 =head4 --errors-to-stdout
 
