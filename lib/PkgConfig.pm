@@ -1709,6 +1709,8 @@ Other contributors include:
 
 =item Breno G. de Oliveira (garu)
 
+=item Gregor Herrmann
+
 =back
 
 =head1 COPYRIGHT AND LICENSE
