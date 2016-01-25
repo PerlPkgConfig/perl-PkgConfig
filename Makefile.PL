@@ -73,6 +73,9 @@ WriteMakefile(
     BUILD_REQUIRES => {
         'ExtUtils::MakeMaker' => '6.56',
     },
+    PM => {
+      "lib/PkgConfig.pm" => "\$(INST_LIB)/PkgConfig.pm",
+    },
     META_MERGE => {
         'meta-spec' => { version => 2 },
         resources => {
