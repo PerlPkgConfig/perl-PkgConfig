@@ -1,6 +1,9 @@
 Revision history for PkgConfig
 
-0.10026 2015-01-08
+0.11026 2016-01-25
+  - Do not install misc .pl files in the distribution root.
+
+0.10026 2016-01-08
   - promote to production
 
 0.09026_02 2016-01-07
