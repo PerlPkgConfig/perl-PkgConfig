@@ -1278,7 +1278,7 @@ PkgConfig - Pure-Perl Core-Only replacement for pkg-config
 
     $ ppkg-config --libs --cflags --static gio-2.0
 
-    #outputs (lines artifically broken up for readability):
+    #outputs (lines artificially broken up for readability):
     # -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include
     # -pthread -lgio-2.0 -lz -lresolv -lgobject-2.0
     # -lgmodule-2.0 -ldl -lgthread-2.0 -pthread -lrt -lglib-2.0
