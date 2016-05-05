@@ -1,5 +1,8 @@
 Revision history for PkgConfig
 
+  - Updated project URLs in README
+  - Spelling fixes in various documentation files
+
 0.11026 2016-01-25
   - Do not install misc .pl files in the distribution root.
 
