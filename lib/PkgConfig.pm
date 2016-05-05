@@ -413,7 +413,7 @@ struct(
      # will be listed first
      'libs_deplist' => '*%',
 
-     # cummulative cflags and ldflags
+     # cumulative cflags and ldflags
      'ldflags'   => '*@',
      'cflags'    => '*@',
 
@@ -707,7 +707,7 @@ sub parse_line {
     #perl variables can't have '.' in them:
     $field =~ s/\./DOT/g;
     
-    #remove quoutes from field names
+    #remove quotes from field names
     $field =~ s/['"]//g;
     
 
@@ -726,7 +726,7 @@ sub parse_line {
     $value = join ' ', map { s/(["'])/\\$1/g; "'$_'" } shellwords $value
       if $value =~ /[\\"']/;
     
-    #quoute the value string, unless quouted already
+    #quote the value string, unless quoted already
     $value = "\"$value\"";
     
     #get existent variables from our hash:
@@ -1482,7 +1482,7 @@ a working version that implements this feature.
 
 =head4 I<< PkgConfig->find >>
 
-    my $result = PkgConfig->find($libary, %options);
+    my $result = PkgConfig->find($library, %options);
 
 Find a library and return a result object.
 C<$library> can be either a single name of a library, or a reference to an
