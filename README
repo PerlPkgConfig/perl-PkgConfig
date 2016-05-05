@@ -49,10 +49,10 @@ perldoc command.
 You can also look for information at:
 
     GitHub, which hosts the projects official repository
-        http://github.com/mnunberg/perl-PkgConfig
+        https://github.com/PerlPkgConfig/perl-PkgConfig
     
     Project's issue tracker on GitHub
-        https://github.com/mnunberg/perl-PkgConfig/issues
+        https://github.com/PerlPkgConfig/perl-PkgConfig/issues
 
     AnnoCPAN, Annotated CPAN documentation
         http://annocpan.org/dist/PkgConfig
