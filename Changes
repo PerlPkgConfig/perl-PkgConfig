@@ -62,10 +62,10 @@ Revision history for PkgConfig
 
 0.08220_02 2014-07-16
   - fix regression in last revision:
-    error in dependant component is propagated to main component
+    error in dependent component is propagated to main component
 
 0.08220_01 2014-07-15
-  - fixed bug where dependant components were having their variables
+  - fixed bug where dependent components were having their variables
     overridden by the main .pc file
 
 0.08220 2014-06-25
@@ -97,7 +97,7 @@ Revision history for PkgConfig
   - added PERL_PKG_CONFIG_SCRIPTS environment variable
 
 0.07620_01 2014-06-08
-  - added get_var public acessor method
+  - added get_var public accessor method
   - support for constraints =, !=, >=, <=, >, and <
 
 0.07620 2014-06-06
@@ -127,7 +127,7 @@ Revision history for PkgConfig
   - Use .pc files from Strawberry Perl on MSWin32 + Strawberry Perl
 
 0.07220 2014-04-26
-  - fix possible 6.2 incompatability
+  - fix possible 6.2 incompatibility
   - remove unintentional new line from default paths on Debian
 
 0.07120 2014-03-26
@@ -159,15 +159,15 @@ Revision history for PkgConfig
 0.06420 2014-02-13
   - use ; instead of : for PKG_CONFIG_PATH on MSWin32
   - support --exact-version, --atleast-version and --max-version
-    (at least enough to suppor ExtUtils::PkgConfig)
+    (at least enough to support ExtUtils::PkgConfig)
   - Fix Libs.private property and therefore --static option which
     was being hidden due to a bug
-  - ExtUtils::PkgConfig compatability
+  - ExtUtils::PkgConfig compatibility
 
 0.06320 2014-02-08
   - explicitly require Perl 5.6 (was already an undeclared requirement)
   - include licensing meta data and LICENSE file
-  - make tests less verbose (copius diagnostics were obsecuring warnings)
+  - make tests less verbose (copious diagnostics were obscuring warnings)
 
 0.06220 2014-02-06
   - on MSWin32 require a more recent version of Archive::Tar that supports
