@@ -83,6 +83,16 @@ if($ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
 
     @DEFAULT_SEARCH_PATH = split $Config{path_sep}, $ENV{PKG_CONFIG_LIBDIR};
 
+} elsif($^O eq 'msys') {
+
+    # MSYS2 seems to actually set PKG_CONFIG_PATH in its /etc/profile
+    # god bless it.  But.  The defaults if you unset the environment
+    # variable are different
+    @DEFAULT_SEARCH_PATH = qw(
+        /usr/lib/pkgconfig
+        /usr/share/pkgconfig
+    );
+
 } elsif($^O eq 'solaris' && $Config{ptrsize} == 8) {
 
     @DEFAULT_SEARCH_PATH = qw(
