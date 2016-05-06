@@ -1100,6 +1100,9 @@ GetOptions(
     'h|help|?'      => \my $WantHelp
 ) or pod2usage(@POD_USAGE_OPTIONS);
 
+if($^O eq 'msys' && !$ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
+    $UseStatic = 1;
+}
 
 if($WantHelp) {
     pod2usage(@POD_USAGE_OPTIONS, -exitval => 0);
