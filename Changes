@@ -1,5 +1,6 @@
 Revision history for PkgConfig
 
+0.12026
   - Updated project URLs in README
   - Spelling fixes in various documentation files
   - Support for MSYS2
