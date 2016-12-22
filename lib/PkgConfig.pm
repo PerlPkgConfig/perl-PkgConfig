@@ -1677,6 +1677,14 @@ package itself (without dependencies).
 
 The original C implementation
 
+=item L<pkgconf|https://github.com/pkgconf/pkgconf>
+
+An alternative C implementation
+
+=item L<PkgConfig::LibPkgConf>
+
+Perl bindings for C<libpkgconf>, the same library that C<pkgconf> is built on.
+
 =item L<ExtUtils::PkgConfig>
 
 A wrapper around the C<pkg-config> binary that can be used in your C<Makefile.PL>
@@ -1685,10 +1693,6 @@ or C<Build.PL>.
 =item L<http://www.openbsd.org/cgi-bin/cvsweb/src/usr.bin/pkg-config/>
 
 Another perl implementation of pkg-config
-
-=item L<pkgconf|https://github.com/pkgconf/pkgconf>
-
-An alternative C implementation
 
 =item L<pkg-config|https://github.com/ruby-gnome2/pkg-config>
 
