@@ -777,6 +777,9 @@ sub parse_pcfile {
     
 
     $self->append_cflags(  $self->_pc_var('cflags') );
+    if($self->static) {
+        $self->append_cflags( $self->_pc_var('cflags.private') );
+    }
     $self->append_ldflags( $self->_pc_var('libs') );
     if($self->static) {
         $self->append_ldflags( $self->_pc_var('libs.private') );

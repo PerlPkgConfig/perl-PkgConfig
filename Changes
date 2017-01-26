@@ -1,5 +1,8 @@
 Revision history for PkgConfig
 
+  - support for static cflags.  This has been supported
+    by pkgconf for a while.
+
 0.12026
   - Updated project URLs in README
   - Spelling fixes in various documentation files
