@@ -1,9 +1,10 @@
 Revision history for PkgConfig
 
+0.14026 2017-01-26
   - support for static cflags.  This has been supported
     by pkgconf for a while.
 
-0.12026
+0.12026 2016-05-09
   - Updated project URLs in README
   - Spelling fixes in various documentation files
   - Support for MSYS2
