@@ -77,7 +77,7 @@ Symbolic links are available on newer versions of windows that use NTFS
 as the file system.  Unfortunately, it appears to create them requires
 administrator access.  I have provided a script in the C<win32> directory
 which you can use to replace the files in the C<script> directory with
-real symbolic links.  You will need to run this script with adminstrator
+real symbolic links.  You will need to run this script with administrator
 rights:
 
  C:\PkgConfig\> perl win32\fix_links.pl

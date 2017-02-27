@@ -188,7 +188,7 @@ Revision history for PkgConfig
     Archive::Extract sometimes wants to lock the tar too (plicease)
 
 0.06020 2014-02-04
-  - avoid infiniate loop on windows (GH#8 plicease)
+  - avoid infinite loop on windows (GH#8 plicease)
   - install script as ppkg-config (everywhere) and pkg-config.pl (non-windows) (GH#7 plicease)
   - removed non-core dependencies (GH#4 plicease)
   - support for --variable (GH#5 Sanel Zukan)
