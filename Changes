@@ -1,5 +1,8 @@
 Revision history for PkgConfig
 
+0.15026 2017-01-26
+  - New release with fixes to META.json
+
 0.14026 2017-01-26
   - support for static cflags.  This has been supported
     by pkgconf for a while.
