@@ -1,5 +1,7 @@
 Revision history for PkgConfig
 
+  - Fix for Perl 5.25.11+ where '.' is not in @INC
+
 0.15026 2017-01-26
   - New release with fixes to META.json
 

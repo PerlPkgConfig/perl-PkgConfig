@@ -93,7 +93,7 @@ WriteMakefile(
         provides => {
             PkgConfig => {
                 file    => "lib/PkgConfig.pm",
-                version => do { require "lib/PkgConfig.pm"; $PkgConfig::VERSION; },
+                version => do { require "./lib/PkgConfig.pm"; $PkgConfig::VERSION; },
             },
         },
     },
