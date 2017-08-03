@@ -1166,7 +1166,7 @@ if($WantFlags) {
 }
 
 my %pc_options;
-if($PrintExists || $AtLeastVersion || $ExactVersion || $MaxVersion) {
+if($PrintExists || $AtLeastVersion || $ExactVersion || $MaxVersion || $PrintVersion) {
     $pc_options{no_recurse} = 1;
 }
 
