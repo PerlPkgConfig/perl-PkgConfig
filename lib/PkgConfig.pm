@@ -1731,6 +1731,8 @@ Other contributors include:
 
 =item Gregor Herrmann
 
+=item Ilya Pavlov (ILUX, Ilya33)
+
 =back
 
 =head1 COPYRIGHT AND LICENSE
