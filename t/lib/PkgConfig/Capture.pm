@@ -3,7 +3,7 @@ package PkgConfig::Capture;
 use strict;
 use warnings;
 use Test::More ();
-use base qw( Exporter );
+use Exporter 'import';
 
 eval {
   require Capture::Tiny;
