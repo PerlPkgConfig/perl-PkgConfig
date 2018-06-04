@@ -400,12 +400,6 @@ sub GuessPaths {
     }
     #log_info(@cpp_output);
     my @include_paths;
-    while (my $path = shift @cpp_output) {
-        if($path =~ /\s*End of search list/) {
-            last;
-        }
-        push @include_paths, $path;
-    }
     @DEFAULT_EXCLUDE_CFLAGS = map { "-I$_" } @include_paths;
     log_debug("Determine exclude CFLAGS", @DEFAULT_EXCLUDE_CFLAGS);
 }
@@ -890,6 +884,14 @@ sub get_cflags {
 
     filter_omit(\@cflags, $self->exclude_cflags);
     filter_dups(\@cflags);
+    my @new_flags;
+    if ( $ENV{PKG_CONFIG_SYSTEM_INCLUDE_PATH} ){
+      for my $i (@cflags) {
+        my @path = split("/", $i);
+        push @new_flags, "-I$ENV{PKG_CONFIG_SYSTEM_INCLUDE_PATH}/".$path[$#path];
+      }
+    }
+    push @cflags, @new_flags;
     _return_context @cflags;
 }
 
