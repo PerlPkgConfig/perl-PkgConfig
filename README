@@ -1,6 +1,6 @@
 PkgConfig
 
-This module provides a pure perl version of pkg-config, a program
+This module is a pure perl version of pkg-config, a program
 that provides compiler and linker flags for installed packages.
 See:
 
