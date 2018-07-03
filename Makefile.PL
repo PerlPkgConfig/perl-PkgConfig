@@ -69,6 +69,7 @@ WriteMakefile(
     EXE_FILES           => \@scripts,
     PREREQ_PM => {
         'Test::More' => '0.94',
+        'Env' => '1.04',
     },
     BUILD_REQUIRES => {
         'ExtUtils::MakeMaker' => '6.56',
