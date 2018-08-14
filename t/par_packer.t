@@ -6,13 +6,15 @@ use PkgConfig;
 use Config;
 use File::Temp qw( tempdir );
 
+my $have_pp = eval 'require pp';
 
 plan skip_all => "Test only for MSWin32" unless $^O eq 'MSWin32';
 plan skip_all => "Test only for strawberry MSWin32" unless $Config{myuname} =~ /strawberry-perl/;
-plan skip_all => "Test needs pp utility to be installed" unless 'require pp';
+plan skip_all => "Test needs pp utility to be installed" unless $have_pp;
+
 plan tests => 3;
 
-if (require pp) {
+if ($have_pp) {
     my $dir = tempdir( CLEANUP => 1);
     my $exe_file = "$dir/a.exe";
     my $test_text = "executable worked";
