@@ -20,7 +20,7 @@ package
 package PkgConfig;
 
 #First two digits are Perl version, second two are pkg-config version
-our $VERSION = '0.19026';
+our $VERSION = '0.20026_01';
 
 $VERSION =~ /([0-9]{2})$/;
 my $compat_version = $1;
@@ -1761,6 +1761,8 @@ Other contributors include:
 =item Gregor Herrmann
 
 =item Ilya Pavlov (ILUX, Ilya33)
+
+=item Shawn Laffan (SLAFFAN, shawnlaffan)
 
 =back
 
