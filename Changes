@@ -1,5 +1,7 @@
 Revision history for PkgConfig
 
+  - On OS X with Homebrew, be more aggresive in finding installed packages
+
 0.21026 2018-08-15
   - promote to production
 

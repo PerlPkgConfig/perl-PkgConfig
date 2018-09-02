@@ -356,11 +356,22 @@ if($ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
             "-I$path/lib/pkgconfig/../../include",
         );
     }
+} elsif($^O eq 'darwin') {
+
+    if(-x '/usr/local/Homebrew/bin/brew') {
+        # Mac OS X with homebrew installed
+        push @DEFAULT_SEARCH_PATH,
+            bsd_glob '/usr/local/opt/*/lib/pkgconfig'
+        ;
+    }
+
 }
 
 my @ENV_SEARCH_PATH = split($Config{path_sep}, $ENV{PKG_CONFIG_PATH} || "");
 
 unshift @DEFAULT_SEARCH_PATH, @ENV_SEARCH_PATH;
+
+print "$_\n" for @DEFAULT_SEARCH_PATH;
 
 if($^O eq 'MSWin32') {
   @DEFAULT_SEARCH_PATH = map { s{\\}{/}g; $_ } map { /\s/ ? Win32::GetShortPathName($_) : $_ } @DEFAULT_SEARCH_PATH;
