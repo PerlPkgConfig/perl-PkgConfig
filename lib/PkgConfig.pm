@@ -516,6 +516,7 @@ sub _pc_var {
     $vname =~ s,\.,DOT,g;
     no strict 'refs';
     $vname = $self->_get_pc_varname($vname);
+    no warnings qw(once);
     my $glob = *{$vname};
     $glob ? $$glob : ();
 }
