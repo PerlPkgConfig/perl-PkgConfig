@@ -1774,6 +1774,8 @@ Other contributors include:
 
 =item Shawn Laffan (SLAFFAN, shawnlaffan)
 
+=item Ari Jolma (AJOLMA)
+
 =back
 
 =head1 COPYRIGHT AND LICENSE

@@ -1,5 +1,7 @@
 Revision history for PkgConfig
 
+  - Fixed only used once warning (gh#45, gh#46 Ari Jolma++)
+
 0.22026 2018-09-03 09:08:39 -0400
   - On OS X with Homebrew, be more aggresive in finding installed packages
 
