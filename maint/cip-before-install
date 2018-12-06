@@ -2,5 +2,5 @@
 
 set -ex
 
-cip exec cpanm -n Capture::Tiny Test::MinimumVersion
+cip exec cpanm -n Capture::Tiny
 cip exec gen_multi_tests.pl
