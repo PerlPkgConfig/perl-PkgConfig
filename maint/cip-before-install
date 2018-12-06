@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cip exec cpanm Capture::Tiny Test::MinimumVersion
+cip exec gen_multi_tests.pl
