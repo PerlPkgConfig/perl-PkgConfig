@@ -27,6 +27,7 @@ subtest 'ppkg-config --modversion with missing dependency' => sub {
   note "out: $out" if defined $out;
   note "err: $err" if defined $err;
 
+  done_testing;
 };
 
 done_testing;
