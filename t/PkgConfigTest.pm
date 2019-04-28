@@ -49,7 +49,7 @@ $SCRIPT = $FindBin::Bin . "/../lib/PkgConfig.pm"
 
 sub run_common {
     my @args = @_;
-    (my $ret = qx($^X $SCRIPT --env-only @args))
+    (my $ret = qx("$^X" "$SCRIPT" --env-only @args))
         =~ s/(?:^\s+)|($?:\s+$)//g;
     $RV = $?;
     $S = $ret;
