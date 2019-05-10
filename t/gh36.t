@@ -16,12 +16,12 @@ subtest 'ppkg-config --modversion with missing dependency' => sub {
 
   my @command = ( @pkg_config, '--modversion', 'foo' );
 
-  note "% @command";  
+  note "% @command";
   my($out, $err, $ret) = capture {
     system @command;
     $?;
   };
-  
+
   is $ret, 0;
   is $out, "1.0.2\n";
   note "out: $out" if defined $out;
