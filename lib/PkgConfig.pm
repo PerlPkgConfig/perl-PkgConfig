@@ -224,13 +224,13 @@ if($ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
 
 } elsif($^O eq 'freebsd') {
 
-    # TODO: FreeBSD 10's version of pkg-config does not
+    # TODO: FreeBSD 10-12's version of pkg-config does not
     # support PKG_CONFIG_DEBUG_SPEW so I can't verify
-    # the path there, but this is what it is for
-    # FreeBSD 9
+    # the path there.
     @DEFAULT_SEARCH_PATH = qw(
         /usr/local/libdata/pkgconfig
         /usr/local/lib/pkgconfig
+        /usr/libdata/pkgconfig
     );
 
 } elsif($^O eq 'netbsd') {
