@@ -229,7 +229,6 @@ if($ENV{PKG_CONFIG_NO_OS_CUSTOMIZATION}) {
     # the path there.
     @DEFAULT_SEARCH_PATH = qw(
         /usr/local/libdata/pkgconfig
-        /usr/local/lib/pkgconfig
         /usr/libdata/pkgconfig
     );
 
