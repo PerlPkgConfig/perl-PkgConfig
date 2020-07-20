@@ -32,7 +32,6 @@ use Config;
 use File::Spec;
 use File::Glob 'bsd_glob';
 use Class::Struct; #in core since 5.004
-use Data::Dumper;
 use File::Basename qw( dirname );
 use Text::ParseWords qw( shellwords );
 
