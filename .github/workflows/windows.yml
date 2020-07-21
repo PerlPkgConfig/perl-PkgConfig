@@ -1,0 +1,39 @@
+name: windows
+
+on:
+  push:
+    branches:
+      - '*'
+    tags-ignore:
+      - '*'
+  pull_request:
+
+env:
+  PERL5LIB: c:\cx\lib\perl5
+  PERL_LOCAL_LIB_ROOT: c:/cx
+  PERL_MB_OPT: --install_base C:/cx
+  PERL_MM_OPT: INSTALL_BASE=C:/cx
+
+jobs:
+  perl:
+
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Perl
+        run: |
+          choco install strawberryperl
+          echo "##[add-path]C:\cx\bin;C:\strawberry\c\bin;C:\strawberry\perl\site\bin;C:\strawberry\perl\bin"
+
+      - name: perl -V
+        run: |
+          perl -V
+
+      - name: Run Build + Test
+        run: |
+          perl gen_multi_tests.pl
+          perl Makefile.PL
+          make
+          make test
