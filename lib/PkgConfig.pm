@@ -1248,10 +1248,10 @@ my $o = PkgConfig->find(\@FINDLIBS, %pc_options);
 
 if($o->errmsg) {
     # --errors-to-stdout
-    if ($print_errors eq 2) {
+    if ($print_errors == 2) {
         print STDOUT $o->errmsg;
     # --print-errors
-    } elsif ($print_errors eq 1) {
+    } elsif ($print_errors == 1) {
         print STDERR $o->errmsg;
     }
     # --silence-errors
