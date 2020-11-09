@@ -1086,7 +1086,7 @@ use warnings;
 use Getopt::Long qw(:config no_ignore_case);
 use Pod::Usage;
 
-my $quiet_errors = 1;
+my $print_errors = 1;
 my @ARGV_PRESERVE = @ARGV;
 
 my @POD_USAGE_SECTIONS = (
@@ -1180,11 +1180,11 @@ if($PrintRealVersion) {
 }
 
 if($PrintErrors) {
-    $quiet_errors = 0;
+    $print_errors = 0;
 }
 
 if($SilenceErrors) {
-    $quiet_errors = 1;
+    $print_errors = 1;
 }
 
 # This option takes precedence over all other options
@@ -1193,13 +1193,13 @@ if($SilenceErrors) {
 # or
 # --print-errors
 if ($ErrToStdOut) {
- $quiet_errors = 2;
+ $print_errors = 2;
 }
 
 my $WantFlags = ($PrintCflags || $PrintLibs || $PrintLibsOnlyL || $PrintCflagsOnlyI || $PrintCflagsOnlyOther || $PrintLibsOnlyOther || $PrintLibsOnlyl || $PrintVersion);
 
 if($WantFlags) {
-    $quiet_errors = 0 unless $SilenceErrors;
+    $print_errors = 0 unless $SilenceErrors;
 }
 
 my %pc_options;
@@ -1248,10 +1248,10 @@ my $o = PkgConfig->find(\@FINDLIBS, %pc_options);
 
 if($o->errmsg) {
     # --errors-to-stdout
-    if ($quiet_errors eq 2) {
+    if ($print_errors eq 2) {
         print STDOUT $o->errmsg;
     # --print-errors
-    } elsif ($quiet_errors eq 1) {
+    } elsif ($print_errors eq 1) {
         print STDERR $o->errmsg;
     }
     # --silence-errors
