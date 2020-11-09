@@ -1180,11 +1180,11 @@ if($PrintRealVersion) {
 }
 
 if($PrintErrors) {
-    $print_errors = 0;
+    $print_errors = 1;
 }
 
 if($SilenceErrors) {
-    $print_errors = 1;
+    $print_errors = 0;
 }
 
 # This option takes precedence over all other options
@@ -1199,7 +1199,7 @@ if ($ErrToStdOut) {
 my $WantFlags = ($PrintCflags || $PrintLibs || $PrintLibsOnlyL || $PrintCflagsOnlyI || $PrintCflagsOnlyOther || $PrintLibsOnlyOther || $PrintLibsOnlyl || $PrintVersion);
 
 if($WantFlags) {
-    $print_errors = 0 unless $SilenceErrors;
+    $print_errors = 1 unless $SilenceErrors;
 }
 
 my %pc_options;
