@@ -15,6 +15,8 @@ my @pkg_config = ( $^X, $INC{'PkgConfig.pm'} );
 #  crocodile from the Miocene Riversleigh fauna.  
 my $nonexistent_lib = 'libtrilophosuchus-rackhami';
 
+my $re_error_message = qr/^Can't find $nonexistent_lib.pc in any of /;
+
 subtest 'ppkg-config with non-existent lib' => sub {
 
   my @command = ( @pkg_config, $nonexistent_lib );
@@ -48,7 +50,7 @@ subtest 'ppkg-config --print-errors with non-existent lib' => sub {
   is $ret, 256, "error code correct";
   is $out, "", "nothing to stdout";
   like $err,
-    qr/^Can't find $nonexistent_lib.pc in any of /,
+    $re_error_message,
     "errors went to stderr";
   note "out: $out" if defined $out;
   note "err: $err" if defined $err;
@@ -87,7 +89,7 @@ subtest 'ppkg-config --errors-to-stdout with non-existent lib' => sub {
 
   is $ret, 256, "error code correct";
   like $out,
-    qr/^Can't find $nonexistent_lib.pc in any of /,
+    $re_error_message,
     "errors went to stdout";
   is $err, "", "nothing to stderr";
   note "out: $out" if defined $out;
@@ -97,4 +99,4 @@ subtest 'ppkg-config --errors-to-stdout with non-existent lib' => sub {
 };
 
 
-done_testing;
+done_testing();
