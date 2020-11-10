@@ -15,7 +15,7 @@ my @pkg_config = ( $^X, $INC{'PkgConfig.pm'} );
 #  crocodile from the Miocene Riversleigh fauna.  
 my $nonexistent_lib = 'libtrilophosuchus-rackhami';
 
-my $re_error_message = qr/^Can't find $nonexistent_lib.pc in any of /;
+my $re_error_message = qr/^Can't find $nonexistent_lib.pc in any of /m;
 
 subtest 'ppkg-config with non-existent lib' => sub {
 
