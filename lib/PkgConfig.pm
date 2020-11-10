@@ -1086,7 +1086,7 @@ use warnings;
 use Getopt::Long qw(:config no_ignore_case);
 use Pod::Usage;
 
-my $print_errors = 1;
+my $print_errors = 0;
 my @ARGV_PRESERVE = @ARGV;
 
 my @POD_USAGE_SECTIONS = (
