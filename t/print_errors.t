@@ -17,9 +17,31 @@ my $nonexistent_lib = 'libtrilophosuchus-rackhami';
 
 my $re_error_message = qr/^Can't find $nonexistent_lib.pc in any of /m;
 
-subtest 'ppkg-config with non-existent lib' => sub {
+my %test_data = (
+  'no-arg' => {
+    stdout => 'unlike',
+    stderr => 'unlike',
+  },
+  '--print-errors' => {
+    stdout => 'unlike',
+    stderr => 'like',
+  },
+  '--silence-errors' => {
+    stdout => 'unlike',
+    stderr => 'unlike',
+  },
+  '--errors-to-stdout' => {
+    stdout => 'like',
+    stderr => 'unlike',
+  },
+  
+);
 
-  my @command = ( @pkg_config, $nonexistent_lib );
+
+foreach my $test_name (sort keys %test_data) {
+  my @command
+    = grep {$_ ne 'no-arg'}
+      ( @pkg_config, $test_name, $nonexistent_lib );
 
   note "% @command";
   my($out, $err, $ret) = capture {
@@ -28,75 +50,22 @@ subtest 'ppkg-config with non-existent lib' => sub {
   };
 
   is $ret, 256, "error code correct";
-  is $out, "", "nothing to stdout";
-  is $err, "", "nothing to stderr";
-  note "out: $out" if defined $out;
-  note "err: $err" if defined $err;
-
-  done_testing();
-};
-
-
-subtest 'ppkg-config --print-errors with non-existent lib' => sub {
-
-  my @command = ( @pkg_config, '--print-errors', $nonexistent_lib );
-
-  note "% @command";
-  my($out, $err, $ret) = capture {
-    system @command;
-    $?;
-  };
-
-  is $ret, 256, "error code correct";
-  is $out, "", "nothing to stdout";
-  like $err,
-    $re_error_message,
-    "errors went to stderr";
+  if ($test_data{$test_name}{stdout} eq 'like') {
+    like $out, $re_error_message, "stdout for $test_name contains error string";
+  }
+  else {
+    unlike $out, $re_error_message, "stdout for $test_name does not contain error string";
+  }
+  if ($test_data{$test_name}{stderr} eq 'like') {
+    like $err, $re_error_message, "stderr for $test_name contains error string";
+  }
+  else {
+    unlike $err, $re_error_message, "stderr for $test_name does not contain error string";
+  }
   note "out: $out" if defined $out;
   note "err: $err" if defined $err;
   
-  done_testing();
-};
-
-subtest 'ppkg-config --silence-errors with non-existent lib' => sub {
-
-  my @command = ( @pkg_config, '--silence-errors', $nonexistent_lib );
-
-  note "% @command";
-  my($out, $err, $ret) = capture {
-    system @command;
-    $?;
-  };
-
-  is $ret, 256, "error code correct";
-  is $out, "", "no errors to stdout";
-  is $err, "", "no errors to stderr";
-  note "out: $out" if defined $out;
-  note "err: $err" if defined $err;
-
-  done_testing();
-};
-
-subtest 'ppkg-config --errors-to-stdout with non-existent lib' => sub {
-
-  my @command = ( @pkg_config, '--errors-to-stdout', $nonexistent_lib );
-
-  note "% @command";
-  my($out, $err, $ret) = capture {
-    system @command;
-    $?;
-  };
-
-  is $ret, 256, "error code correct";
-  like $out,
-    $re_error_message,
-    "errors went to stdout";
-  is $err, "", "nothing to stderr";
-  note "out: $out" if defined $out;
-  note "err: $err" if defined $err;
-
-  done_testing();
-};
+}
 
 
 done_testing();
