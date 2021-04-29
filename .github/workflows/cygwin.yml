@@ -41,7 +41,6 @@ jobs:
       - name: perl -V
         run: |
           perl -V
-          gcc --version
 
       - name: Run Tests
         run: |
