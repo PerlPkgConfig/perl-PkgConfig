@@ -19,6 +19,9 @@ jobs:
 
     runs-on: macOS-latest
 
+    strategy:
+      fail-fast: false
+
     steps:
       - uses: actions/checkout@v2
 
@@ -31,9 +34,32 @@ jobs:
       - name: perl -V
         run: perl -V
 
-      - name: Run Build + Test
+      - name: Prepare for cache
         run: |
-          perl gen_multi_tests.pl
-          perl Makefile.PL
-          make
-          make test
+          perl -V > perlversion.txt
+          ls -l perlversion.txt
+
+      - name: Cache CPAN modules
+        uses: actions/cache@v1
+        with:
+          path: ~/perl5
+          key: ${{ runner.os }}-build-${{ hashFiles('perlversion.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ hashFiles('perlversion.txt') }}
+
+      - name: Install Static Dependencies
+        run: |
+          cpanm -n Dist::Zilla
+          dzil authordeps --missing | cpanm -n
+          dzil listdeps --missing   | cpanm -n
+
+      - name: Install Dynamic Dependencies
+        run: dzil run --no-build 'cpanm --installdeps .'
+
+      - name: Run Tests
+        run: dzil test -v
+
+      - name: CPAN log
+        if: ${{ failure() }}
+        run: |
+          cat ~/.cpanm/latest-build/build.log
