@@ -47,11 +47,11 @@ $SCRIPT = $FindBin::Bin . "/../lib/PkgConfig.pm"
 
 sub run_common {
     my @args = @_;
-    my $pkg_config = join ' ',
-                     map { /\s/ ? "\"$_\"" : $_ }
-                     ($^X, $SCRIPT);
-    (my $ret = qx($pkg_config --env-only @args))
-        =~ s/(?:^\s+)|($?:\s+$)//g;
+    unshift @args, $^X, $SCRIPT, '--env-only';
+    open my $fh, "-|", @args or die "open @args: $!";
+    local $/;
+    (my $ret = <$fh>) =~ s/(?:^\s+)|($?:\s+$)//g;
+    close $fh;
     $RV = $?;
     $S = $ret;
 }
@@ -67,7 +67,7 @@ sub run_exists_test {
     foreach my $fname (@$flist) {
         next unless -f $fname;
         my ($base) = fileparse($fname, ".pc");
-        run_common("$base");
+        run_common($base);
         ok($RV == 0, "Package $base exists");
     }
 }
@@ -76,7 +76,7 @@ sub _single_flags_test {
     my $fname = shift;
     return unless -f $fname;
     my ($base) = fileparse($fname, ".pc");
-    run_common("--libs --cflags $base --define-variable=prefix=blah");
+    run_common(qw(--libs --cflags), $base, qw(--define-variable=prefix=blah));
     ok($RV == 0, "Got OK for --libs and --cflags");
     if($S =~ /-(?:L|I)/) {
         if($S !~ /blah/) {
