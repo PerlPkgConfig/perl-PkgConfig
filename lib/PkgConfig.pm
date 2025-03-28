@@ -726,8 +726,7 @@ sub get_requires {
 
 
 sub parse_line {
-    my ($self,$line,$evals) = @_;
-    no strict 'vars';
+    my ($self,$line) = @_;
 
     $line =~ s/#[^#]+$//g; # strip comments
     return unless $line;
@@ -757,11 +756,9 @@ sub parse_line {
     #remove quotes from field names
     $field =~ s/['"]//g;
 
-
     # pkg-config escapes a '$' with a '$$'. This won't go in perl:
     $value =~ s/[^\\]\$\$/\\\$/g;
     $value =~ s/([@%&])/\$1/g;
-
 
     # append our pseudo-package for persistence.
     my $varclass = $self->varclass;
@@ -777,11 +774,8 @@ sub parse_line {
     $value = "\"$value\"";
 
     #get existent variables from our hash:
-
-
     #$value =~ s/'/"/g; #allow for interpolation
     $self->assign_var($field, $value);
-
 }
 
 sub parse_pcfile {
@@ -798,15 +792,13 @@ sub parse_pcfile {
     $text =~ s,\\[\r\n],,g;
     @lines = split(/[\r\n]/, $text);
 
-    my @eval_strings;
-
     #Fold lines:
 
     my $pcfiledir = dirname $pcfile;
     $pcfiledir =~ s{\\}{/}g;
 
     foreach my $line ("pcfiledir=$pcfiledir", @lines) {
-        $self->parse_line($line, \@eval_strings);
+        $self->parse_line($line);
     }
 
     #now that we have eval strings, evaluate them all within the same
