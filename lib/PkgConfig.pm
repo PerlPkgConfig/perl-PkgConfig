@@ -485,9 +485,9 @@ struct(
 ################################################################################
 
 sub assign_var {
-    my ($self,$field,$value) = @_;
+    my ($self,$field,$value,$force) = @_;
     # if the user has provided a definition, use that.
-    if(exists $self->uservars->{$field}) {
+    if (!$force && exists $self->uservars->{$field}) {
         log_debug("Prefix already defined by user");
         return;
     }
@@ -499,7 +499,8 @@ sub assign_var {
 
 sub prepare_vars {
     my $self = shift;
-    @{ $self->filevars }{keys %{$self->uservars}} = values %{$self->uservars};
+    my $uv = $self->uservars;
+    $self->assign_var($_, $uv->{$_}, 1) for keys %$uv;
 }
 
 ################################################################################
