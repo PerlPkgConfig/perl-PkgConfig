@@ -724,7 +724,6 @@ sub get_requires {
     @ret;
 }
 
-
 sub parse_line {
     my ($self,$line) = @_;
 
@@ -960,7 +959,6 @@ sub _split_flags {
     if(@flags == 1) {
         my $str = shift @flags;
         return () if !$str;
-        #@flags = map { s/\\(\s)/$1/g; $_ } split(/(?<!\\)\s+/, $str);
         @flags = shellwords $str;
     }
     @flags = grep $_, @flags;
@@ -973,7 +971,6 @@ sub filter_dups {
     my $array = shift;
     my @ret;
     my %seen_hash;
-    #@$array = reverse @$array;
     foreach my $elem (@$array) {
         if(exists $seen_hash{$elem}) {
             next;
