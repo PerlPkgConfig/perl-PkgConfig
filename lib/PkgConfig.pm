@@ -7,16 +7,6 @@
 # You may use and distribute this software under the same terms and conditions
 # as Perl itself.
 
-package
-    PkgConfig::Vars;
-# this is a namespace for .pc files to hold their variables without
-# relying on lexical scope.
-
-package
-    PkgConfig::UDefs;
-# This namespace provides user-defined variables which are to override any
-# declarations within the .pc file itself.
-
 package PkgConfig;
 
 #First two digits are Perl version, second two are pkg-config version
@@ -58,8 +48,6 @@ BEGIN {
 
     }
 }
-
-our $VarClassSerial = 0;
 
 ################################################################################
 ### Sane Defaults                                                            ###
@@ -475,9 +463,6 @@ struct(
      'pkg_description' => '$',
      'errmsg'   => '$',
 
-     # classes used for storing persistent data
-     'varclass' => '$',
-     'udefclass' => '$',
      'filevars' => '*%',
      'uservars' => '*%',
 
@@ -499,64 +484,22 @@ struct(
 ################################################################################
 ################################################################################
 
-sub _get_pc_varname {
-    my ($self,$vname_base) = @_;
-    $self->varclass . "::" . $vname_base;
-}
-
-sub _get_pc_udefname {
-    my ($self,$vname_base) = @_;
-    $self->udefclass . "::" . $vname_base;
-}
-
-sub _pc_var {
-    my ($self,$vname) = @_;
-    $vname =~ s,\.,DOT,g;
-    no strict 'refs';
-    $vname = $self->_get_pc_varname($vname);
-    no warnings qw(once);
-    my $glob = *{$vname};
-    $glob ? $$glob : ();
-}
-
-sub _quote_cvt($)  {
-    join ' ', map { s/(\s|"|')/\\$1/g; $_ } shellwords(shift)
-}
-
 sub assign_var {
     my ($self,$field,$value) = @_;
-    no strict 'refs';
-
     # if the user has provided a definition, use that.
-    if(exists ${$self->udefclass."::"}{$field}) {
+    if(exists $self->uservars->{$field}) {
         log_debug("Prefix already defined by user");
         return;
     }
-    my $evalstr = sprintf('$%s = PkgConfig::_quote_cvt(%s)',
-                    $self->_get_pc_varname($field), $value);
-
-    log_debug("EVAL", $evalstr);
-    do {
-        no warnings 'uninitialized';
-        eval $evalstr;
-    };
-    if($@) {
-        log_err($@);
-    }
+    my $filevars = $self->filevars;
+    $value =~ s/(^|[^\$])\$\{([a-z_.]+)\}/$1$filevars->{$2}/g;
+    $value =~ s/\$\$/\$/g; # pkg-config escapes a '$' with a '$$'
+    $self->filevars->{$field} = $value;
 }
 
 sub prepare_vars {
     my $self = shift;
-    my $varclass = $self->varclass;
-    no strict 'refs';
-
-    %{$varclass . "::"} = ();
-
-    while (my ($name,$glob) = each %{$self->udefclass."::"}) {
-        my $ref = *$glob{SCALAR};
-        next unless defined $ref;
-        ${"$varclass\::$name"} = $$ref;
-    }
+    @{ $self->filevars }{keys %{$self->uservars}} = values %{$self->uservars};
 }
 
 ################################################################################
@@ -587,19 +530,9 @@ sub find {
         #print "$basekey: " . Dumper($list);
     }
 
-    $VarClassSerial++;
-    $options{varclass} = sprintf("PkgConfig::Vars::SERIAL_%d", $VarClassSerial);
-    $options{udefclass} = sprintf("PkgConfig::UDefs::SERIAL_%d", $VarClassSerial);
+    $options{filevars} = {};
+    $options{uservars} = {$options{VARS} ? %{ delete $options{VARS} } : ()};
     $options{original} = \%original;
-
-
-    my $udefs = delete $options{VARS} || {};
-
-    while (my ($k,$v) = each %$udefs) {
-        no strict 'refs';
-        my $vname = join('::', $options{udefclass}, $k);
-        ${$vname} = $v;
-    }
 
     my $o = $cls->new(%options);
 
@@ -749,31 +682,12 @@ sub parse_line {
 
     $field = lc($field);
 
-    #perl variables can't have '.' in them:
-    $field =~ s/\./DOT/g;
-
     #remove quotes from field names
     $field =~ s/['"]//g;
 
-    # pkg-config escapes a '$' with a '$$'. This won't go in perl:
-    $value =~ s/[^\\]\$\$/\\\$/g;
-    $value =~ s/([@%&])/\$1/g;
-
-    # append our pseudo-package for persistence.
-    my $varclass = $self->varclass;
     $value =~ s/(\$\{[^}]+\})/lc($1)/ge;
 
-    $value =~ s/\$\{/\$\{$varclass\::/g;
-
-    # preserve quoted space
-    $value = join ' ', map { s/(["'])/\\$1/g; "'$_'" } shellwords $value
-      if $value =~ /[\\"']/;
-
-    #quote the value string, unless quoted already
-    $value = "\"$value\"";
-
     #get existent variables from our hash:
-    #$value =~ s/'/"/g; #allow for interpolation
     $self->assign_var($field, $value);
 }
 
@@ -923,7 +837,7 @@ sub get_ldflags {
 
 sub get_var {
     my($self, $name) = @_;
-    $self->_pc_var($name);
+    $self->filevars->{$name};
 }
 
 sub get_list {
