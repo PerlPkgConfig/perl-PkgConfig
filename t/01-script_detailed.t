@@ -23,14 +23,22 @@ if (eval { symlink("",""); 1 }) {
   require Text::ParseWords;
   my $dir = File::Temp::tempdir( CLEANUP => 1 );
   my $sub = File::Spec->catdir($dir, 'in space');
+  my $exp_stub = "-I".File::Spec->rel2abs($sub)."/../../include";
+  $exp_stub =~ s|\\|/|g; # standard behaviour of this module
   symlink File::Spec->rel2abs(File::Spec->catdir(qw(t data strawberry c lib pkgconfig))), $sub;
   local $ENV{PKG_CONFIG_PATH} = $sub;
-  run_common(qw(--cflags freetype2));
-  chomp(my $out = $PkgConfigTest::S);
-  ($out) = Text::ParseWords::shellwords($out);
-  my $exp = "-I".File::Spec->rel2abs($sub)."/../../include/freetype2";
-  $exp =~ s|\\|/|g; # standard behaviour of this module
-  is $out, $exp, "survived being in space";
+  require PkgConfig; # after the environment variable is set
+  for (['freetype2','/freetype2']) {
+    my ($lib, $suffix) = @$_;
+    run_common(qw(--cflags), $lib);
+    chomp(my $out = $PkgConfigTest::S);
+    ($out) = Text::ParseWords::shellwords($out);
+    is $out, $exp_stub.(ref $suffix ? $suffix->[0] : $suffix), "$lib survived being in space";
+    my $pkg = PkgConfig->find($lib);
+    my $arr = [$pkg->get_cflags];
+    my $exp = ref $suffix ? [map "$exp_stub$_", @$suffix] : ["$exp_stub$suffix"];
+    is_deeply $arr, $exp, "$lib get_cflags" or diag explain [$arr,$exp];
+  }
 }
 
 done_testing();
