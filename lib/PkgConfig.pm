@@ -804,18 +804,18 @@ sub parse_pcfile {
     #lexical scope:
 
 
-    $self->append_cflags(  $self->_pc_var('cflags') );
+    $self->append_cflags(  $self->get_var('cflags') );
     if($self->static) {
-        $self->append_cflags( $self->_pc_var('cflags.private') );
+        $self->append_cflags( $self->get_var('cflags.private') );
     }
-    $self->append_ldflags( $self->_pc_var('libs') );
+    $self->append_ldflags( $self->get_var('libs') );
     if($self->static) {
-        $self->append_ldflags( $self->_pc_var('libs.private') );
+        $self->append_ldflags( $self->get_var('libs.private') );
     }
 
     my @deps;
-    my @deps_dynamic = $self->get_requires( $self->_pc_var('requires'));
-    my @deps_static = $self->get_requires( $self->_pc_var('requires.private') );
+    my @deps_dynamic = $self->get_requires( $self->get_var('requires'));
+    my @deps_static = $self->get_requires( $self->get_var('requires.private') );
     @deps = @deps_dynamic;
 
 
@@ -824,9 +824,9 @@ sub parse_pcfile {
     }
 
     if($self->recursion == 1 && (!$self->pkg_exists())) {
-        $self->pkg_version( $self->_pc_var('version') );
-        $self->pkg_url( $self->_pc_var('url') );
-        $self->pkg_description( $self->_pc_var('description') );
+        $self->pkg_version( $self->get_var('version') );
+        $self->pkg_url( $self->get_var('url') );
+        $self->pkg_description( $self->get_var('description') );
         $self->pkg_exists(1);
     }
 
@@ -936,7 +936,7 @@ sub get_list {
         for my $pc (bsd_glob("$d/*.pc")) {
             if ($pc =~ m|/([^\\\/]+)\.pc$|) {
                 $self->parse_pcfile($pc);
-                push @rv, [$1, $self->_pc_var('name') . ' - ' . $self->_pc_var('description')];
+                push @rv, [$1, $self->get_var('name') . ' - ' . $self->get_var('description')];
             }
         }
     }
@@ -1259,7 +1259,7 @@ if($o->print_variables) {
 }
 
 if($OutputVariableValue) {
-    my $val = ($o->_pc_var($OutputVariableValue) or "");
+    my $val = ($o->get_var($OutputVariableValue) or "");
     print $val . "\n";
 }
 
