@@ -68,7 +68,7 @@ sub run_exists_test {
         next unless -f $fname;
         my ($base) = fileparse($fname, ".pc");
         run_common($base);
-        ok($RV == 0, "Package $base exists");
+        is $RV, 0, "Package $base exists";
     }
 }
 
@@ -77,7 +77,7 @@ sub _single_flags_test {
     return unless -f $fname;
     my ($base) = fileparse($fname, ".pc");
     run_common(qw(--libs --cflags), $base, qw(--define-variable=prefix=blah));
-    ok($RV == 0, "Got OK for --libs and --cflags");
+    is $RV, 0, "Got OK for '$fname' --libs and --cflags";
     if($S =~ /-(?:L|I)/) {
         if($S !~ /blah/) {
             
@@ -97,13 +97,13 @@ sub _single_flags_test {
             
             my @lines = <$fh>;
             if(grep /\$\{prefix\}/, @lines) {
-                ok(0, "Expected substituted prefix for $base");
+                fail "Expected substituted prefix for $base";
             } else {
                 note "File $fname has no \${prefix} directive";
             }
             return;
         }
-        ok($S =~ /blah/, "Found modified prefix for $base");
+        like $S, qr/blah/, "Found modified prefix for $base";
     }
 }
 
