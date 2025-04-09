@@ -28,10 +28,11 @@ if (eval { symlink("",""); 1 }) {
   symlink File::Spec->rel2abs(File::Spec->catdir(qw(t data strawberry c lib pkgconfig))), $sub;
   local $ENV{PKG_CONFIG_PATH} = $sub;
   require PkgConfig; # after the environment variable is set
-  for (['freetype2','/freetype2']) {
+  for (['freetype2','/freetype2'], ['gsl',''], ['libxml-2.0','/libxml2'], ['libexslt',['','/libxml2']]) {
     my ($lib, $suffix) = @$_;
     run_common(qw(--cflags), $lib);
     chomp(my $out = $PkgConfigTest::S);
+    like $out, qr/^"/, "$lib cflags should be quote-protected to survive make";
     ($out) = Text::ParseWords::shellwords($out);
     is $out, $exp_stub.(ref $suffix ? $suffix->[0] : $suffix), "$lib survived being in space";
     my $pkg = PkgConfig->find($lib);

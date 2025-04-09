@@ -492,9 +492,27 @@ sub assign_var {
         return;
     }
     my $filevars = $self->filevars;
-    $value =~ s/(^|[^\$])\$\{([a-z_.]+)\}/$1$filevars->{$2}/g;
-    $value =~ s/\$\$/\$/g; # pkg-config escapes a '$' with a '$$'
-    $self->filevars->{$field} = $value;
+    if ($field =~ /(dir|prefix)$/ && $value !~ /\$/) {
+      # heuristic - it's a directory
+      $filevars->{$field} = [grep length, $value];
+      return;
+    }
+    my (@inwords, @outwords) = shellwords $value; # FIRST split it
+    for my $inword (@inwords) {                   # THEN sub
+      my ($word, $outword) = ($inword, '');
+      while ($word =~ s/(^|.*?[^\$])\$\{([a-z_.]+)\}//s) {
+        my ($start, $var) = ($1, $2);
+        $outword .= $start;
+        my $val = $filevars->{$var};
+        next if !defined($val) or !grep length, @$val;
+        $outword .= "@$val";
+      }
+      $outword .= $word; # what's left
+      next if !length $outword;
+      $outword =~ s/\$\$/\$/g; # pkg-config escapes a '$' with a '$$'
+      push @outwords, $outword;
+    }
+    $filevars->{$field} = \@outwords;
 }
 
 sub prepare_vars {
@@ -583,8 +601,7 @@ sub find {
 ################################################################################
 ################################################################################
 sub append_ldflags {
-    my ($self,@flags) = @_;
-    my @ld_flags = _split_flags(@flags);
+    my ($self,@ld_flags) = @_;
 
     foreach my $ldflag (@ld_flags) {
         next unless $ldflag =~ /^-Wl/;
@@ -611,7 +628,7 @@ sub append_ldflags {
 # notify us about extra compiler flags
 sub append_cflags {
     my ($self,@flags) = @_;
-    push @{$self->cflags}, _split_flags(@flags);
+    push @{$self->cflags}, @flags;
 }
 
 
@@ -682,6 +699,13 @@ sub parse_line {
     log_debugf("Field %s, Value %s", $field, $value);
 
     $field = lc($field);
+
+    my $filevars = $self->filevars;
+    if ($tok eq ':' and $field !~ /^(cflags|libs)/) {
+      $value =~ s/(^|[^\$])\$\{([a-z_.]+)\}/$1$filevars->{$2}[0]/g;
+      $filevars->{$field} = [grep length, $value]; # no need quoting
+      return;
+    }
 
     #remove quotes from field names
     $field =~ s/['"]//g;
@@ -803,8 +827,15 @@ sub find_pcfile {
 ################################################################################
 ################################################################################
 
-sub _return_context (@) {
-    wantarray ? (@_) : join(' ', map { s/(\s|['"])/\\$1/g; $_ } @_)
+sub _quote_protect {
+  my ($v) = @_;
+  return qq{""} if !length($v); # empty strings get preserved
+  return $v if $v !~ /['"\s\\]/;
+  $v =~ s/["\\]/\\$&/g; # the "" will already protect from ' and space
+  $v =~ /['\s]/ ? qq{"$v"} : $v;
+}
+sub _return_context {
+  wantarray ? @_ : join ' ', map _quote_protect($_), @_;
 }
 
 sub get_cflags {
@@ -838,7 +869,7 @@ sub get_ldflags {
 
 sub get_var {
     my($self, $name) = @_;
-    $self->filevars->{$name};
+    _return_context @{ $self->filevars->{$name} };
 }
 
 sub get_list {
@@ -1174,7 +1205,7 @@ if($o->print_variables) {
 }
 
 if($OutputVariableValue) {
-    my $val = ($o->get_var($OutputVariableValue) or "");
+    my $val = $o->get_var($OutputVariableValue) || "";
     print $val . "\n";
 }
 
