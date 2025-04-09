@@ -19,7 +19,7 @@ foreach my $type (qw( doublequote singlequote backslash quotevar ))
     is $pkg->errmsg, undef, 'no error';
 
     is_deeply [$pkg->get_cflags], ['-I/foo/include', '-DFOO=bar baz'], "$type list context";
-    is scalar $pkg->get_cflags, '-I/foo/include -DFOO=bar\\ baz', "$type scalar context";
+    is scalar $pkg->get_cflags, '-I/foo/include "-DFOO=bar baz"', "$type scalar context";
     #note $_ for $pkg->get_cflags;
     done_testing;
   };
