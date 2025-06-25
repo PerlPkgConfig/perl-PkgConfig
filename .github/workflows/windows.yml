@@ -9,26 +9,21 @@ on:
   pull_request:
 
 env:
-  PERL5LIB: c:\cx\lib\perl5
-  PERL_LOCAL_LIB_ROOT: c:/cx
-  PERL_MB_OPT: --install_base C:/cx
-  PERL_MM_OPT: INSTALL_BASE=C:/cx
+  AUTOMATED_TESTING: 1
 
 jobs:
   perl:
-
     runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Perl
-        run: |
-          choco install strawberryperl
-          echo "C:\cx\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          echo "C:\strawberry\c\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          echo "C:\strawberry\perl\site\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          echo "C:\strawberry\perl\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: "5.38"
+          distribution: strawberry
+          install-modules-with: cpanm
+          install-modules-args: --with-develop --with-configure --verbose
 
       - name: perl -V
         run: |
@@ -38,5 +33,5 @@ jobs:
         run: |
           perl gen_multi_tests.pl
           perl Makefile.PL
-          make
-          make test
+          gmake
+          gmake test
