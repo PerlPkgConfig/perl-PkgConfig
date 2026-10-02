@@ -27,7 +27,7 @@ jobs:
           git config --global core.eol lf
         shell: powershell
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Perl
         uses: msys2/setup-msys2@v2
