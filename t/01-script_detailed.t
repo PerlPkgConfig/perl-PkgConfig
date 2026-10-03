@@ -26,6 +26,12 @@ if (eval { symlink("",""); 1 }) {
   my $exp_stub = "-I".File::Spec->rel2abs($sub)."/../../include";
   $exp_stub =~ s|\\|/|g; # standard behaviour of this module
   symlink File::Spec->rel2abs(File::Spec->catdir(qw(t data strawberry c lib pkgconfig))), $sub;
+  # in-process, default search paths with spaces get converted to short names on MSWin32
+  my $exp_stub_inproc = $exp_stub;
+  if ($^O eq 'MSWin32') {
+    $exp_stub_inproc = "-I".Win32::GetShortPathName(File::Spec->rel2abs($sub))."/../../include";
+    $exp_stub_inproc =~ s|\\|/|g;
+  }
   local $ENV{PKG_CONFIG_PATH} = $sub;
   require PkgConfig; # after the environment variable is set
   for (['freetype2','/freetype2'], ['gsl',''], ['libxml-2.0','/libxml2'], ['libexslt',['','/libxml2']]) {
@@ -37,7 +43,7 @@ if (eval { symlink("",""); 1 }) {
     is $out, $exp_stub.(ref $suffix ? $suffix->[0] : $suffix), "$lib survived being in space";
     my $pkg = PkgConfig->find($lib);
     my $arr = [$pkg->get_cflags];
-    my $exp = ref $suffix ? [map "$exp_stub$_", @$suffix] : ["$exp_stub$suffix"];
+    my $exp = ref $suffix ? [map "$exp_stub_inproc$_", @$suffix] : ["$exp_stub_inproc$suffix"];
     is_deeply $arr, $exp, "$lib get_cflags" or diag explain [$arr,$exp];
   }
 }
